@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky's Multiply Quest</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="app-shell">
+        <section class="hero-card">
+            <div class="hero-copy">
+                <p class="eyebrow">Nathan "Sky" Mission</p>
+                <h1>Sky, train for your perfect multiplication score.</h1>
+                <p class="subtitle">Nathan, choose how far you want to go, pick a game mode, and see if Sky can finish with every answer correct.</p>
+            </div>
+
+            <div class="control-panel">
+                <label class="field-group" for="difficulty">
+                    <span>Difficulty</span>
+                    <select id="difficulty" aria-describedby="difficulty-help"></select>
+                </label>
+                <p id="difficulty-help" class="field-help">Difficulty 1 asks only facts with 1. Difficulty 12 unlocks every table from 1 to 12.</p>
+
+                <label id="focus-table-group" class="field-group hidden" for="focus-table">
+                    <span>Focus Table</span>
+                    <select id="focus-table" aria-describedby="focus-table-help"></select>
+                </label>
+                <p id="focus-table-help" class="field-help hidden">Pick one multiplication column for Sky to practice as flash cards, like the 6 times table.</p>
+
+                <label class="field-group" for="question-count">
+                    <span>Questions</span>
+                    <select id="question-count" aria-describedby="question-count-help">
+                        <option value="10" selected>10 questions</option>
+                        <option value="25">25 questions</option>
+                        <option value="50">50 questions</option>
+                        <option value="100">100 questions</option>
+                    </select>
+                </label>
+                <p id="question-count-help" class="field-help">Choose a round length for Sky: 10, 25, 50, or 100 questions.</p>
+
+                <div class="mode-grid" role="group" aria-label="Game modes">
+                    <button class="mode-card active" type="button" data-mode="normal">
+                        <strong>Normal</strong>
+                        <span>Calm pace, choose your question count, earn stars.</span>
+                    </button>
+                    <button class="mode-card" type="button" data-mode="sprint">
+                        <strong>Sprint</strong>
+                        <span>Choose your question count and race the clock.</span>
+                    </button>
+                    <button class="mode-card" type="button" data-mode="perfect">
+                        <strong>Perfect Run</strong>
+                        <span>Choose your question count. One mistake ends the streak.</span>
+                    </button>
+                    <button class="mode-card" type="button" data-mode="flash">
+                        <strong>Flash Cards</strong>
+                        <span>Practice one table only and flip answers on when you want them.</span>
+                    </button>
+                </div>
+
+                <button id="start-game" class="primary-button" type="button">Start Sky's Game</button>
+            </div>
+        </section>
+
+        <section class="status-band" aria-live="polite">
+            <div class="status-pill">
+                <span class="status-label">Mode</span>
+                <strong id="current-mode">Normal</strong>
+            </div>
+            <div class="status-pill">
+                <span id="scope-label" class="status-label">Level</span>
+                <strong id="current-difficulty">1</strong>
+            </div>
+            <div class="status-pill">
+                <span class="status-label">Score</span>
+                <strong id="score-value">0</strong>
+            </div>
+            <div class="status-pill">
+                <span class="status-label">Streak</span>
+                <strong id="streak-value">0</strong>
+            </div>
+            <div class="status-pill timer-pill">
+                <span class="status-label">Time</span>
+                <strong id="timer-value">--</strong>
+            </div>
+        </section>
+
+        <section class="game-board">
+            <div class="question-card">
+                <p class="question-intro">Your challenge</p>
+                <h2 id="question-text">Press Start Sky's Game to begin.</h2>
+                <p id="question-tip" class="question-tip">Sky, normal mode is a good place to warm up.</p>
+
+                <form id="answer-form" class="answer-row" autocomplete="off">
+                    <label class="sr-only" for="answer-input">Answer</label>
+                    <input id="answer-input" inputmode="numeric" pattern="[0-9]*" type="text" placeholder="Type your answer" disabled>
+                    <button id="submit-answer" class="secondary-button" type="submit" disabled>Check</button>
+                </form>
+
+                <div id="flash-controls" class="flash-controls hidden">
+                    <button id="show-answer" class="secondary-button" type="button" disabled>Show Answer</button>
+                    <button id="next-card" class="primary-button subtle-button" type="button" disabled>Next Card</button>
+                    <label class="toggle-chip" for="answers-on">
+                        <input id="answers-on" type="checkbox">
+                        <span>Answers On</span>
+                    </label>
+                </div>
+
+                <div id="flash-answer" class="flash-answer hidden">Answer: 0</div>
+
+                <div id="feedback-banner" class="feedback-banner neutral">Sky, ready for your first badge?</div>
+            </div>
+
+            <aside class="mission-panel">
+                <div class="mission-card">
+                    <h3>Mission</h3>
+                    <p id="mission-text">Pick a difficulty and mode, then press Start Sky's Game.</p>
+                </div>
+                <div class="mission-card">
+                    <h3>Progress</h3>
+                    <p id="progress-text">0 / 0 questions</p>
+                    <div class="progress-track" aria-hidden="true">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                </div>
+                <div class="mission-card badges-card">
+                    <h3>Badges</h3>
+                    <div id="badge-strip" class="badge-strip">
+                        <span class="badge ghost">Sky Starter</span>
+                        <span class="badge ghost">Cloud Streak</span>
+                        <span class="badge ghost">Sky Champion</span>
+                    </div>
+                </div>
+                <div class="mission-card summary-card">
+                    <h3>Round Summary</h3>
+                    <p id="summary-text">No Sky round played yet.</p>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
