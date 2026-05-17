@@ -1,23 +1,28 @@
-# Multiply Quest
+# Sky's Math Facts Quest
 
-Multiply Quest is a small browser game for 10-year-olds who are learning multiplication facts and want to chase a perfect score.
+Sky's Math Facts Quest is a small browser game for 10-year-olds who are learning multiplication and division facts and want to chase a perfect score.
 
 ## What it includes
 
 - Difficulty levels from 1 to 12.
-- Three game versions:
-  - Normal: calm mode with 12 questions.
+- Two operations:
+  - Multiplication
+  - Division with exact whole-number answers only
+- Four game versions:
+  - Normal: calm mode with a configurable question count.
   - Sprint: timed mode with 45 seconds.
   - Perfect Run: one mistake ends the round.
-- Score, streak, badges, and progress tracking.
+  - Flash Cards: focus on one table or one divisor with answer reveal controls.
+- Score, streak, badges, progress tracking, and flash-card answer reveals.
 
 ## Difficulty rules
 
-- Level 1 only asks questions using the 1 times table.
-- Level 6 asks questions using tables 1 through 6.
-- Level 12 unlocks all multiplication tables from 1 through 12.
+- Multiplication level 1 only asks questions using the 1 times table.
+- Multiplication level 6 asks questions using tables 1 through 6.
+- Division level 6 uses exact division facts with divisors 1 through 6.
+- Level 12 unlocks all supported fact families from 1 through 12.
 
-The left side of each question follows the selected level. The right side stays within 1 through 12 so the player still practices the full table range.
+Multiplication questions use factors up to the selected level. Division questions are generated from multiplication facts so the answers stay whole numbers.
 
 ## Run it
 
@@ -29,3 +34,4 @@ Open `index.html` in a browser.
 - Normal is the default because it is the least stressful entry point for a 10-year-old.
 - Sprint gives variety without changing the core learning goal.
 - Perfect Run is the clearest way to reward mastery and repeat practice.
+- Flash Cards gives focused practice on one multiplication table or one division family.

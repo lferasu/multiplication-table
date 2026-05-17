@@ -3,142 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sky's Multiply Quest</title>
+    <title>Sky's Math Facts Quest</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <main class="app-shell">
-        <section class="hero-card">
-            <div class="hero-copy">
-                <p class="eyebrow">Nathan "Sky" Mission</p>
-                <h1>Sky, train for your perfect multiplication score.</h1>
-                <p class="subtitle">Nathan, choose how far you want to go, pick a game mode, and see if Sky can finish with every answer correct.</p>
-            </div>
+        <section id="setup-screen" class="screen setup-screen">
+            <section class="setup-layout">
+                <div class="setup-hero-stack">
+                    <section class="hero-card hero-main">
+                        <div class="hero-copy">
+                            <p class="eyebrow">Nathan "Sky" Mission</p>
+                            <h1>Sky, train for your perfect math facts score.</h1>
+                            <p class="subtitle">Nathan, switch between multiplication and division, choose how far you want to go, and see if Sky can finish with every answer correct.</p>
 
-            <div class="control-panel">
-                <label class="field-group" for="difficulty">
-                    <span>Difficulty</span>
-                    <select id="difficulty" aria-describedby="difficulty-help"></select>
-                </label>
-                <p id="difficulty-help" class="field-help">Difficulty 1 asks only facts with 1. Difficulty 12 unlocks every table from 1 to 12.</p>
+                            <div class="hero-chip-row" aria-label="Mission highlights">
+                                <span class="hero-chip">Perfect-score quest</span>
+                                <span class="hero-chip">Levels 1 to 12</span>
+                                <span class="hero-chip">Four play styles</span>
+                            </div>
+                        </div>
 
-                <label id="focus-table-group" class="field-group hidden" for="focus-table">
-                    <span>Focus Table</span>
-                    <select id="focus-table" aria-describedby="focus-table-help"></select>
-                </label>
-                <p id="focus-table-help" class="field-help hidden">Pick one multiplication column for Sky to practice as flash cards, like the 6 times table.</p>
+                        <div class="hero-orbit" aria-hidden="true">
+                            <div class="orbit-ring orbit-ring-large"></div>
+                            <div class="orbit-ring orbit-ring-small"></div>
+                            <div class="hero-mascot">
+                                <span class="hero-mascot-title">Sky</span>
+                                <span class="hero-mascot-score">100%</span>
+                            </div>
+                        </div>
+                    </section>
 
-                <label class="field-group" for="question-count">
-                    <span>Questions</span>
-                    <select id="question-count" aria-describedby="question-count-help">
-                        <option value="10" selected>10 questions</option>
-                        <option value="25">25 questions</option>
-                        <option value="50">50 questions</option>
-                        <option value="100">100 questions</option>
-                    </select>
-                </label>
-                <p id="question-count-help" class="field-help">Choose a round length for Sky: 10, 25, 50, or 100 questions.</p>
-
-                <div class="mode-grid" role="group" aria-label="Game modes">
-                    <button class="mode-card active" type="button" data-mode="normal">
-                        <strong>Normal</strong>
-                        <span>Calm pace, choose your question count, earn stars.</span>
-                    </button>
-                    <button class="mode-card" type="button" data-mode="sprint">
-                        <strong>Sprint</strong>
-                        <span>Choose your question count and race the clock.</span>
-                    </button>
-                    <button class="mode-card" type="button" data-mode="perfect">
-                        <strong>Perfect Run</strong>
-                        <span>Choose your question count. One mistake ends the streak.</span>
-                    </button>
-                    <button class="mode-card" type="button" data-mode="flash">
-                        <strong>Flash Cards</strong>
-                        <span>Practice one table only and flip answers on when you want them.</span>
-                    </button>
+                    <section class="setup-mini-band" aria-label="What makes this round fun">
+                        <article class="mini-card mini-card-wide">
+                            <p class="insight-label">Quick setup</p>
+                            <p>One screen, one launch, no hunting around.</p>
+                        </article>
+                        <article class="mini-card">
+                            <p class="insight-label">Kid-friendly</p>
+                            <p>Bright controls and easy choices.</p>
+                        </article>
+                        <article class="mini-card">
+                            <p class="insight-label">Practice styles</p>
+                            <p>Normal, sprint, perfect, or flash cards.</p>
+                        </article>
+                    </section>
                 </div>
 
-                <button id="start-game" class="primary-button" type="button">Start Sky's Game</button>
+                <section class="setup-controls">
+                    <div class="setup-console panel-card">
+                        <div class="panel-heading">
+                            <p class="eyebrow">Mission Setup</p>
+                            <h2>Build Sky's next round.</h2>
+                            <p>Choose the facts Sky will practice, then launch the game page.</p>
+                        </div>
+
+                        <div class="setup-field-grid">
+                            <div class="field-card">
+                                <label class="field-group" for="operation">
+                                    <span>Operation</span>
+                                    <select id="operation" aria-describedby="operation-help">
+                                        <option value="multiplication" selected>Multiplication</option>
+                                        <option value="division">Division</option>
+                                        <option value="mixed">Mixed</option>
+                                    </select>
+                                </label>
+                                <p id="operation-help" class="field-help">Choose whether Sky practices multiplication facts, exact division facts, or a mixed set of both.</p>
+                            </div>
+
+                            <div class="field-card">
+                                <label class="field-group" for="difficulty">
+                                    <span>Difficulty</span>
+                                    <select id="difficulty" aria-describedby="difficulty-help"></select>
+                                </label>
+                                <p id="difficulty-help" class="field-help">Difficulty 1 asks only facts with 1. Difficulty 12 unlocks every table from 1 to 12.</p>
+                            </div>
+
+                            <div class="field-card focus-field-card">
+                                <label id="focus-table-group" class="field-group hidden" for="focus-table">
+                                    <span id="focus-table-label">Focus Table</span>
+                                    <select id="focus-table" aria-describedby="focus-table-help"></select>
+                                </label>
+                                <p id="focus-table-help" class="field-help hidden">Pick one multiplication column for Sky to practice as flash cards, like the 6 times table.</p>
+                            </div>
+
+                            <div class="field-card">
+                                <label id="sprint-level-group" class="field-group hidden" for="sprint-level">
+                                    <span>Sprint Level</span>
+                                    <select id="sprint-level" aria-describedby="sprint-level-help">
+                                        <option value="very-easy" selected>Very Easy</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                        <option value="extreme">Extreme</option>
+                                    </select>
+                                </label>
+                                <p id="sprint-level-help" class="field-help hidden">Choose the sprint pace. Very Easy is the default starting level.</p>
+                            </div>
+
+                            <div id="question-count-card" class="field-card">
+                                <label class="field-group" for="question-count">
+                                    <span>Questions</span>
+                                    <select id="question-count" aria-describedby="question-count-help">
+                                        <option value="10" selected>10 questions</option>
+                                        <option value="25">25 questions</option>
+                                        <option value="50">50 questions</option>
+                                        <option value="100">100 questions</option>
+                                    </select>
+                                </label>
+                                <p id="question-count-help" class="field-help">Choose a round length for Sky: 10, 25, 50, or 100 questions.</p>
+                            </div>
+
+                            <div id="journey-question-count-card" class="field-card hidden">
+                                <label class="field-group" for="journey-question-count">
+                                    <span>Era Questions</span>
+                                    <select id="journey-question-count" aria-describedby="journey-question-count-help">
+                                        <option value="5">5 questions per era</option>
+                                        <option value="10" selected>10 questions per era</option>
+                                    </select>
+                                </label>
+                                <p id="journey-question-count-help" class="field-help">American Eras Math Journey uses shorter era rounds: choose 5 or 10 questions for each era.</p>
+                            </div>
+                        </div>
+
+                        <div class="panel-heading compact-heading mode-heading">
+                            <p class="eyebrow">Challenge Style</p>
+                            <h3>Choose how Sky plays.</h3>
+                        </div>
+
+                        <div class="mode-grid" role="group" aria-label="Game modes">
+                            <button class="mode-card active" type="button" data-mode="normal">
+                                <strong>Normal</strong>
+                                <span>Calm pace, choose your question count, earn stars.</span>
+                            </button>
+                            <button class="mode-card" type="button" data-mode="sprint">
+                                <strong>Sprint</strong>
+                                <span>Choose your question count and race the clock.</span>
+                            </button>
+                            <button class="mode-card" type="button" data-mode="perfect">
+                                <strong>Perfect Run</strong>
+                                <span>Choose your question count. One mistake ends the streak.</span>
+                            </button>
+                            <button class="mode-card" type="button" data-mode="flash">
+                                <strong>Flash Cards</strong>
+                                <span>Practice one fact family only and flip answers on when you want them.</span>
+                            </button>
+                            <button class="mode-card eras-mode-card" type="button" data-mode="eras">
+                                <strong>American Eras Math Journey</strong>
+                                <span>Travel through American history by mastering math era by era.</span>
+                            </button>
+                        </div>
+
+                        <div class="launch-panel">
+                            <div>
+                            <p class="eyebrow">Ready To Launch</p>
+                            <p class="launch-copy">When the setup looks right, start the game and move to the play screen.</p>
+                            </div>
+                            <button id="start-game" class="primary-button" type="button">Start Sky's Game</button>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </section>
+
+        <section id="game-screen" class="screen game-screen hidden">
+            <header class="game-topbar">
+                <div>
+                    <p class="eyebrow">Sky's Live Board</p>
+                    <h2>Game Time</h2>
+                </div>
+                <button id="back-to-setup" class="secondary-button" type="button">Back To Setup</button>
+            </header>
+
+            <section class="status-band" aria-live="polite">
+                <div class="status-pill">
+                    <span class="status-label">Mode</span>
+                    <strong id="current-mode">Normal</strong>
+                </div>
+                <div class="status-pill">
+                    <span class="status-label">Operation</span>
+                    <strong id="current-operation">Multiplication</strong>
+                </div>
+                <div class="status-pill">
+                    <span id="scope-label" class="status-label">Level</span>
+                    <strong id="current-difficulty">1</strong>
+                </div>
+                <div class="status-pill">
+                    <span class="status-label">Score</span>
+                    <strong id="score-value">0</strong>
+                </div>
+                <div class="status-pill">
+                    <span class="status-label">Accuracy</span>
+                    <strong id="accuracy-value">--</strong>
+                </div>
+                <div class="status-pill">
+                    <span class="status-label">Streak</span>
+                    <strong id="streak-value">0</strong>
+                </div>
+                <div class="status-pill timer-pill">
+                    <span class="status-label">Time</span>
+                    <strong id="timer-value">--</strong>
+                    <span id="timer-pace" class="timer-pace">Free pace</span>
+                    <div class="timer-track" aria-hidden="true">
+                        <div id="timer-progress" class="timer-progress"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="game-board">
+                <div class="question-card">
+                    <p class="question-intro">Your challenge</p>
+                    <h2 id="question-text">Press Start Sky's Game to begin.</h2>
+                    <p id="question-tip" class="question-tip">Sky, multiplication normal mode is a good place to warm up.</p>
+
+                    <form id="answer-form" class="answer-row" autocomplete="off">
+                        <label class="sr-only" for="answer-input">Answer</label>
+                        <input id="answer-input" inputmode="numeric" pattern="[0-9]*" type="text" placeholder="Type your answer" disabled>
+                        <button id="submit-answer" class="secondary-button" type="submit" disabled>Check</button>
+                    </form>
+
+                    <div id="flash-controls" class="flash-controls hidden">
+                        <button id="show-answer" class="secondary-button" type="button" disabled>Show Answer</button>
+                        <button id="next-card" class="primary-button subtle-button" type="button" disabled>Next Card</button>
+                        <label class="toggle-chip" for="answers-on">
+                            <input id="answers-on" type="checkbox">
+                            <span>Answers On</span>
+                        </label>
+                    </div>
+
+                    <div id="flash-answer" class="flash-answer hidden">Answer: 0</div>
+
+                    <div id="feedback-banner" class="feedback-banner neutral">Sky, ready for your first badge?</div>
+                </div>
+
+                <section id="journey-card" class="mission-card journey-card hidden">
+                    <div id="journey-image" class="journey-image-card" aria-live="polite" role="button" tabindex="0" aria-label="Open the full history image">
+                        <img id="journey-era-photo" class="journey-era-photo" src="" alt="">
+                        <div id="journey-image-loader" class="journey-image-loader hidden" aria-hidden="true">
+                            <div class="journey-loader-core">
+                                <span class="journey-loader-ring"></span>
+                                <span class="journey-loader-dot journey-loader-dot-a"></span>
+                                <span class="journey-loader-dot journey-loader-dot-b"></span>
+                                <span class="journey-loader-dot journey-loader-dot-c"></span>
+                            </div>
+                            <p class="journey-loader-text">Loading history image...</p>
+                        </div>
+                        <div class="journey-image-backdrop">
+                            <span id="journey-era-stamp" class="journey-era-stamp">Jamestown Era</span>
+                        </div>
+                        <div id="journey-fact-overlay" class="journey-fact-overlay hidden">
+                            <p class="journey-fact-label">History Fact</p>
+                            <p id="journey-fact-text" class="journey-fact-text">Era facts appear here when Sky gets answers right.</p>
+                            <p id="journey-continue-hint" class="journey-continue-hint hidden">Press any key for the next challenge.</p>
+                        </div>
+                    </div>
+                    <div class="journey-card-copy">
+                        <div class="journey-heading-row">
+                            <div>
+                                <p class="eyebrow">American Eras Math Journey</p>
+                                <h3 id="journey-era-name">Jamestown Era</h3>
+                            </div>
+                            <span id="journey-era-badge" class="journey-era-badge">Era 1 of 8</span>
+                        </div>
+                        <p id="journey-era-description" class="journey-era-description">Build strong multiplication facts while exploring the first English settlement.</p>
+                        <div class="journey-progress-block">
+                            <div class="journey-progress-head">
+                                <span>Era Progress</span>
+                                <strong id="journey-era-progress-text">0 / 10</strong>
+                            </div>
+                            <div class="progress-track journey-progress-track" aria-hidden="true">
+                                <div id="journey-era-progress-bar" class="progress-bar journey-progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="mission-panel">
+                    <div class="mission-card">
+                        <h3>Mission</h3>
+                        <p id="mission-text">Pick an operation, difficulty, and mode, then press Start Sky's Game.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Progress</h3>
+                        <p id="progress-text">0 / 0 questions</p>
+                        <div class="progress-track" aria-hidden="true">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div class="mission-card badges-card">
+                        <h3>Badges</h3>
+                        <div id="badge-strip" class="badge-strip">
+                            <span class="badge ghost">Sky Starter</span>
+                            <span class="badge ghost">Cloud Streak</span>
+                            <span class="badge ghost">Perfect Star</span>
+                        </div>
+                    </div>
+                    <div class="mission-card summary-card">
+                        <h3>Round Summary</h3>
+                        <p id="summary-text">No Sky round played yet.</p>
+                    </div>
+                </aside>
+            </section>
+        </section>
+
+        <section id="result-modal" class="result-modal hidden" role="dialog" aria-modal="true" aria-labelledby="result-title">
+            <div id="result-dialog" class="result-dialog">
+                <button id="close-result-dialog" class="result-close" type="button">Close</button>
+                <div id="result-celebration" class="result-celebration hidden" aria-hidden="true"></div>
+                <p id="result-rating-chip" class="result-rating-chip">Round Complete</p>
+                <div class="result-hero">
+                    <div class="result-hero-copy">
+                        <p id="result-praise" class="result-praise">Amazing work!</p>
+                        <h2 id="result-title">Sky's Results</h2>
+                        <p id="result-message" class="result-message">Check the stats and choose what to do next.</p>
+                    </div>
+
+                    <div id="result-score-spotlight" class="result-score-spotlight">
+                        <span id="result-score-label" class="result-score-label">Final Score</span>
+                        <strong id="result-score-value" class="result-score-value">1900</strong>
+                        <span id="result-score-note" class="result-score-note">100% Accuracy</span>
+                        <span id="result-award-note" class="result-award-note">Perfect Star Unlocked</span>
+                    </div>
+                </div>
+
+                <div class="result-stats" aria-label="Round stats">
+                    <div class="result-stat-card">
+                        <span id="result-stat-1-label" class="result-stat-label">Correct</span>
+                        <strong id="result-stat-1-value" class="result-stat-value">10 / 10</strong>
+                    </div>
+                    <div class="result-stat-card">
+                        <span id="result-stat-2-label" class="result-stat-label">Best Streak</span>
+                        <strong id="result-stat-2-value" class="result-stat-value">10</strong>
+                    </div>
+                </div>
+
+                <p id="result-summary" class="result-summary">Sky finished strong.</p>
+
+                <div class="result-actions">
+                    <button id="result-play-again" class="primary-button" type="button">Play Again</button>
+                    <button id="result-back-setup" class="secondary-button" type="button">Back To Setup</button>
+                </div>
             </div>
         </section>
 
-        <section class="status-band" aria-live="polite">
-            <div class="status-pill">
-                <span class="status-label">Mode</span>
-                <strong id="current-mode">Normal</strong>
-            </div>
-            <div class="status-pill">
-                <span id="scope-label" class="status-label">Level</span>
-                <strong id="current-difficulty">1</strong>
-            </div>
-            <div class="status-pill">
-                <span class="status-label">Score</span>
-                <strong id="score-value">0</strong>
-            </div>
-            <div class="status-pill">
-                <span class="status-label">Streak</span>
-                <strong id="streak-value">0</strong>
-            </div>
-            <div class="status-pill timer-pill">
-                <span class="status-label">Time</span>
-                <strong id="timer-value">--</strong>
-            </div>
-        </section>
-
-        <section class="game-board">
-            <div class="question-card">
-                <p class="question-intro">Your challenge</p>
-                <h2 id="question-text">Press Start Sky's Game to begin.</h2>
-                <p id="question-tip" class="question-tip">Sky, normal mode is a good place to warm up.</p>
-
-                <form id="answer-form" class="answer-row" autocomplete="off">
-                    <label class="sr-only" for="answer-input">Answer</label>
-                    <input id="answer-input" inputmode="numeric" pattern="[0-9]*" type="text" placeholder="Type your answer" disabled>
-                    <button id="submit-answer" class="secondary-button" type="submit" disabled>Check</button>
-                </form>
-
-                <div id="flash-controls" class="flash-controls hidden">
-                    <button id="show-answer" class="secondary-button" type="button" disabled>Show Answer</button>
-                    <button id="next-card" class="primary-button subtle-button" type="button" disabled>Next Card</button>
-                    <label class="toggle-chip" for="answers-on">
-                        <input id="answers-on" type="checkbox">
-                        <span>Answers On</span>
-                    </label>
+        <section id="journey-image-modal" class="journey-image-modal hidden" role="dialog" aria-modal="true" aria-labelledby="journey-image-modal-title">
+            <div class="journey-image-modal-dialog">
+                <button id="close-journey-image-modal" class="result-close journey-image-close" type="button">Close</button>
+                <div class="journey-image-modal-media">
+                    <img id="journey-image-modal-photo" class="journey-image-modal-photo" src="" alt="">
                 </div>
-
-                <div id="flash-answer" class="flash-answer hidden">Answer: 0</div>
-
-                <div id="feedback-banner" class="feedback-banner neutral">Sky, ready for your first badge?</div>
+                <div class="journey-image-modal-copy">
+                    <p class="journey-image-modal-eyebrow">American Eras Image</p>
+                    <h2 id="journey-image-modal-title">History Image</h2>
+                    <p id="journey-image-modal-era" class="journey-image-modal-era">Jamestown Era</p>
+                    <p id="journey-image-modal-fact" class="journey-image-modal-fact">Open an image to read the fact without the smaller card overlay.</p>
+                </div>
             </div>
-
-            <aside class="mission-panel">
-                <div class="mission-card">
-                    <h3>Mission</h3>
-                    <p id="mission-text">Pick a difficulty and mode, then press Start Sky's Game.</p>
-                </div>
-                <div class="mission-card">
-                    <h3>Progress</h3>
-                    <p id="progress-text">0 / 0 questions</p>
-                    <div class="progress-track" aria-hidden="true">
-                        <div id="progress-bar" class="progress-bar"></div>
-                    </div>
-                </div>
-                <div class="mission-card badges-card">
-                    <h3>Badges</h3>
-                    <div id="badge-strip" class="badge-strip">
-                        <span class="badge ghost">Sky Starter</span>
-                        <span class="badge ghost">Cloud Streak</span>
-                        <span class="badge ghost">Sky Champion</span>
-                    </div>
-                </div>
-                <div class="mission-card summary-card">
-                    <h3>Round Summary</h3>
-                    <p id="summary-text">No Sky round played yet.</p>
-                </div>
-            </aside>
         </section>
     </main>
 
+    <script src="journey-cards.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
