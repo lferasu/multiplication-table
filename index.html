@@ -8,19 +8,98 @@
 </head>
 <body>
     <main class="app-shell">
-        <section id="setup-screen" class="screen setup-screen">
+        <section id="operation-screen" class="screen setup-screen">
+            <section class="setup-layout">
+                <div class="setup-hero-stack">
+                    <section class="hero-card hero-main">
+                        <div class="hero-copy">
+                            <p class="eyebrow">Step 1</p>
+                            <h1>Choose Sky's operation mission.</h1>
+                            <p class="subtitle">Start with the math path first, then move to a separate config screen for difficulty, game type, and round settings.</p>
+
+                            <div class="hero-chip-row" aria-label="Operation options">
+                                <span class="hero-chip">Add</span>
+                                <span class="hero-chip">Subtract</span>
+                                <span class="hero-chip">Multiply</span>
+                                <span class="hero-chip">Divide</span>
+                                <span class="hero-chip">Mix</span>
+                            </div>
+                        </div>
+
+                        <div class="hero-orbit" aria-hidden="true">
+                            <div class="orbit-ring orbit-ring-large"></div>
+                            <div class="orbit-ring orbit-ring-small"></div>
+                            <div class="hero-mascot">
+                                <span class="hero-mascot-title">Sky</span>
+                                <span class="hero-mascot-score">GO</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="setup-mini-band" aria-label="How the flow works">
+                        <article class="mini-card mini-card-wide">
+                            <p class="insight-label">Screen 1</p>
+                            <p>Pick the operation first.</p>
+                        </article>
+                        <article class="mini-card">
+                            <p class="insight-label">Screen 2</p>
+                            <p>Set difficulty, mode, and question count.</p>
+                        </article>
+                        <article class="mini-card">
+                            <p class="insight-label">Screen 3</p>
+                            <p>Play the round, then retry or go back.</p>
+                        </article>
+                    </section>
+                </div>
+
+                <section class="setup-controls">
+                    <div class="setup-console panel-card">
+                        <div class="panel-heading">
+                            <p class="eyebrow">Operation Select</p>
+                            <h2>Pick what Sky will practice.</h2>
+                            <p>Tap one option to open the separate config screen.</p>
+                        </div>
+
+                        <div class="operation-choice-grid" role="group" aria-label="Operation choices">
+                            <button class="operation-choice-card" type="button" data-operation-choice="multiplication">
+                                <strong>Mult</strong>
+                                <span>Practice multiplication facts and times-table fluency.</span>
+                            </button>
+                            <button class="operation-choice-card" type="button" data-operation-choice="division">
+                                <strong>Div</strong>
+                                <span>Practice exact division facts with whole-number answers.</span>
+                            </button>
+                            <button class="operation-choice-card" type="button" data-operation-choice="addition">
+                                <strong>Add</strong>
+                                <span>Practice stacked addition with carries and digit-by-digit input.</span>
+                            </button>
+                            <button class="operation-choice-card" type="button" data-operation-choice="subtraction">
+                                <strong>Sub</strong>
+                                <span>Practice stacked subtraction with borrows and digit-by-digit input.</span>
+                            </button>
+                            <button class="operation-choice-card" type="button" data-operation-choice="mixed">
+                                <strong>Mix</strong>
+                                <span>Use every operation the selected game type allows.</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </section>
+
+        <section id="config-screen" class="screen setup-screen hidden">
             <section class="setup-layout">
                 <div class="setup-hero-stack">
                     <section class="hero-card hero-main">
                         <div class="hero-copy">
                             <p class="eyebrow">Nathan "Sky" Mission</p>
                             <h1>Sky, train for your perfect math facts score.</h1>
-                            <p class="subtitle">Nathan, switch between multiplication and division, choose how far you want to go, and see if Sky can finish with every answer correct.</p>
+                            <p class="subtitle">Nathan, switch between addition, subtraction, multiplication, and division, choose how far you want to go, and see if Sky can finish with every answer correct.</p>
 
                             <div class="hero-chip-row" aria-label="Mission highlights">
                                 <span class="hero-chip">Perfect-score quest</span>
                                 <span class="hero-chip">Levels 1 to 12</span>
-                                <span class="hero-chip">Four play styles</span>
+                                <span class="hero-chip">Seven play styles</span>
                             </div>
                         </div>
 
@@ -45,7 +124,7 @@
                         </article>
                         <article class="mini-card">
                             <p class="insight-label">Practice styles</p>
-                            <p>Normal, sprint, perfect, or flash cards.</p>
+                            <p>Normal, Trifecta, sprint, perfect, flash cards, and two history journeys.</p>
                         </article>
                     </section>
                 </div>
@@ -53,22 +132,35 @@
                 <section class="setup-controls">
                     <div class="setup-console panel-card">
                         <div class="panel-heading">
-                            <p class="eyebrow">Mission Setup</p>
-                            <h2>Build Sky's next round.</h2>
-                            <p>Choose the facts Sky will practice, then launch the game page.</p>
+                            <div class="config-heading-row">
+                                <div>
+                                    <p class="eyebrow">Step 2</p>
+                                    <h2>Build Sky's next round.</h2>
+                                    <p>Set difficulty, game type, and round details before you launch play.</p>
+                                </div>
+                                <button id="back-to-operation" class="secondary-button subtle-button" type="button">Main Screen</button>
+                            </div>
                         </div>
 
                         <div class="setup-field-grid">
-                            <div class="field-card">
+                            <div class="field-card hidden">
                                 <label class="field-group" for="operation">
                                     <span>Operation</span>
                                     <select id="operation" aria-describedby="operation-help">
+                                        <option value="addition">Addition</option>
+                                        <option value="subtraction">Subtraction</option>
                                         <option value="multiplication" selected>Multiplication</option>
                                         <option value="division">Division</option>
                                         <option value="mixed">Mixed</option>
                                     </select>
                                 </label>
-                                <p id="operation-help" class="field-help">Choose whether Sky practices multiplication facts, exact division facts, or a mixed set of both.</p>
+                                <p id="operation-help" class="field-help">Choose whether Sky practices column math, multiplication facts, exact division facts, or a mixed set of every supported operation.</p>
+                            </div>
+
+                            <div class="field-card selected-operation-card">
+                                <span class="field-static-label">Operation</span>
+                                <strong id="selected-operation-label" class="selected-operation-label">Multiplication</strong>
+                                <p class="field-help">Use the main screen to change the operation before starting a round.</p>
                             </div>
 
                             <div class="field-card">
@@ -76,7 +168,7 @@
                                     <span>Difficulty</span>
                                     <select id="difficulty" aria-describedby="difficulty-help"></select>
                                 </label>
-                                <p id="difficulty-help" class="field-help">Difficulty 1 asks only facts with 1. Difficulty 12 unlocks every table from 1 to 12.</p>
+                                <p id="difficulty-help" class="field-help">Difficulty 2 starts with the 2 times table. Difficulty 12 unlocks every table from 2 to 12.</p>
                             </div>
 
                             <div class="field-card focus-field-card">
@@ -116,13 +208,13 @@
 
                             <div id="journey-question-count-card" class="field-card hidden">
                                 <label class="field-group" for="journey-question-count">
-                                    <span>Era Questions</span>
+                                    <span id="journey-question-count-label">Journey Questions</span>
                                     <select id="journey-question-count" aria-describedby="journey-question-count-help">
                                         <option value="5">5 questions per era</option>
                                         <option value="10" selected>10 questions per era</option>
                                     </select>
                                 </label>
-                                <p id="journey-question-count-help" class="field-help">American Eras Math Journey uses shorter era rounds: choose 5 or 10 questions for each era.</p>
+                                <p id="journey-question-count-help" class="field-help">Journey modes use shorter rounds: choose 5 or 10 questions for each stage.</p>
                             </div>
                         </div>
 
@@ -135,6 +227,10 @@
                             <button class="mode-card active" type="button" data-mode="normal">
                                 <strong>Normal</strong>
                                 <span>Calm pace, choose your question count, earn stars.</span>
+                            </button>
+                            <button class="mode-card" type="button" data-mode="trifecta">
+                                <strong>Trifecta</strong>
+                                <span>Stack three addition or subtraction rows and solve the whole tower.</span>
                             </button>
                             <button class="mode-card" type="button" data-mode="sprint">
                                 <strong>Sprint</strong>
@@ -152,12 +248,16 @@
                                 <strong>American Eras Math Journey</strong>
                                 <span>Travel through American history by mastering math era by era.</span>
                             </button>
+                            <button class="mode-card eras-mode-card" type="button" data-mode="empires">
+                                <strong>European Empires Math Journey</strong>
+                                <span>Travel through British, Spanish, German, Dutch, and Russian empires with faster final-stage math.</span>
+                            </button>
                         </div>
 
                         <div class="launch-panel">
                             <div>
-                            <p class="eyebrow">Ready To Launch</p>
-                            <p class="launch-copy">When the setup looks right, start the game and move to the play screen.</p>
+                            <p class="eyebrow">Step 3</p>
+                            <p class="launch-copy">When the config looks right, start the round and move to the separate gameplay screen.</p>
                             </div>
                             <button id="start-game" class="primary-button" type="button">Start Sky's Game</button>
                         </div>
@@ -172,7 +272,7 @@
                     <p class="eyebrow">Sky's Live Board</p>
                     <h2>Game Time</h2>
                 </div>
-                <button id="back-to-setup" class="secondary-button" type="button">Back To Setup</button>
+                <button id="back-to-setup" class="secondary-button" type="button">Back To Config</button>
             </header>
 
             <section class="status-band" aria-live="polite">
@@ -200,14 +300,6 @@
                     <span class="status-label">Streak</span>
                     <strong id="streak-value">0</strong>
                 </div>
-                <div class="status-pill timer-pill">
-                    <span class="status-label">Time</span>
-                    <strong id="timer-value">--</strong>
-                    <span id="timer-pace" class="timer-pace">Free pace</span>
-                    <div class="timer-track" aria-hidden="true">
-                        <div id="timer-progress" class="timer-progress"></div>
-                    </div>
-                </div>
             </section>
 
             <section class="game-board">
@@ -215,8 +307,19 @@
                     <p class="question-intro">Your challenge</p>
                     <h2 id="question-text">Press Start Sky's Game to begin.</h2>
                     <p id="question-tip" class="question-tip">Sky, multiplication normal mode is a good place to warm up.</p>
+                    <div class="question-timer-wrap">
+                        <div class="status-pill timer-pill question-timer-pill">
+                            <span class="status-label">Time</span>
+                            <strong id="timer-value">--</strong>
+                            <span id="timer-pace" class="timer-pace">Free pace</span>
+                            <div class="timer-track" aria-hidden="true">
+                                <div id="timer-progress" class="timer-progress"></div>
+                            </div>
+                        </div>
+                    </div>
 
                     <form id="answer-form" class="answer-row" autocomplete="off">
+                        <div id="addition-board" class="addition-board hidden" aria-live="polite"></div>
                         <label class="sr-only" for="answer-input">Answer</label>
                         <input id="answer-input" inputmode="numeric" pattern="[0-9]*" type="text" placeholder="Type your answer" disabled>
                         <button id="submit-answer" class="secondary-button" type="submit" disabled>Check</button>
@@ -260,15 +363,15 @@
                     <div class="journey-card-copy">
                         <div class="journey-heading-row">
                             <div>
-                                <p class="eyebrow">American Eras Math Journey</p>
+                                <p class="eyebrow">History Math Journey</p>
                                 <h3 id="journey-era-name">Jamestown Era</h3>
                             </div>
-                            <span id="journey-era-badge" class="journey-era-badge">Era 1 of 8</span>
+                            <span id="journey-era-badge" class="journey-era-badge">Stage 1 of 8</span>
                         </div>
                         <p id="journey-era-description" class="journey-era-description">Build strong multiplication facts while exploring the first English settlement.</p>
                         <div class="journey-progress-block">
                             <div class="journey-progress-head">
-                                <span>Era Progress</span>
+                                <span>Journey Progress</span>
                                 <strong id="journey-era-progress-text">0 / 10</strong>
                             </div>
                             <div class="progress-track journey-progress-track" aria-hidden="true">
@@ -341,7 +444,8 @@
 
                 <div class="result-actions">
                     <button id="result-play-again" class="primary-button" type="button">Play Again</button>
-                    <button id="result-back-setup" class="secondary-button" type="button">Back To Setup</button>
+                    <button id="result-back-setup" class="secondary-button" type="button">Go To Config</button>
+                    <button id="result-back-main" class="secondary-button subtle-button" type="button">Main Screen</button>
                 </div>
             </div>
         </section>
@@ -353,7 +457,7 @@
                     <img id="journey-image-modal-photo" class="journey-image-modal-photo" src="" alt="">
                 </div>
                 <div class="journey-image-modal-copy">
-                    <p class="journey-image-modal-eyebrow">American Eras Image</p>
+                    <p class="journey-image-modal-eyebrow">History Journey Image</p>
                     <h2 id="journey-image-modal-title">History Image</h2>
                     <p id="journey-image-modal-era" class="journey-image-modal-era">Jamestown Era</p>
                     <p id="journey-image-modal-fact" class="journey-image-modal-fact">Open an image to read the fact without the smaller card overlay.</p>

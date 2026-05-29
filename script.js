@@ -7,6 +7,12 @@ const allowedQuestionCounts = [10, 25, 50, 100];
 const allowedJourneyQuestionCounts = [5, 10];
 
 const operations = {
+    addition: {
+        label: "Addition"
+    },
+    subtraction: {
+        label: "Subtraction"
+    },
     multiplication: {
         label: "Multiplication"
     },
@@ -26,7 +32,7 @@ const sprintPaceBands = [
     { key: "extreme", label: "Extreme", secondsPerQuestion: 2 }
 ];
 
-const eras = [
+const americanJourneyEras = [
     {
         id: "jamestown",
         name: "Jamestown Era",
@@ -173,11 +179,136 @@ const eras = [
     }
 ];
 
+const europeanEmpireEras = [
+    {
+        id: "british",
+        name: "British Empire",
+        passMark: 90,
+        totalQuestions: 10,
+        operations: ["multiplication"],
+        maxFactor: 6,
+        maxRight: 10,
+        image: "https://upload.wikimedia.org/wikipedia/commons/b/bd/British_Empire_1921.png",
+        description: "Open the European empires journey with strong multiplication practice across ships, trade routes, and global maps.",
+        paceLabel: "Harbor pace",
+        secondsPerQuestion: 8,
+        facts: [
+            "British ships, ports, and trade routes connected lands across several continents.",
+            "Maps, compasses, and sea travel were key tools for building long-distance empires.",
+            "Merchants and sailors depended on careful counting, measuring, and timing."
+        ]
+    },
+    {
+        id: "spanish",
+        name: "Spanish Empire",
+        passMark: 90,
+        totalQuestions: 10,
+        operations: ["multiplication"],
+        maxFactor: 8,
+        maxRight: 11,
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Spanish_Empire_Anachronous_en.svg",
+        description: "Raise the multiplication challenge while exploring treasure fleets, fortified cities, and global exploration routes.",
+        paceLabel: "Fleet pace",
+        secondsPerQuestion: 7,
+        facts: [
+            "Spanish treasure fleets crossed the Atlantic carrying silver, supplies, and soldiers.",
+            "Stone forts and walled cities helped protect important ports and trade centers.",
+            "Explorers used charts, stars, and wind patterns to guide long voyages."
+        ]
+    },
+    {
+        id: "german",
+        name: "German Empire",
+        passMark: 90,
+        totalQuestions: 10,
+        operations: ["multiplication", "division"],
+        maxFactor: 10,
+        maxRight: 12,
+        image: "https://upload.wikimedia.org/wikipedia/commons/3/32/Deutsches_Kaiserreich%2C_mit_Kolonien.png",
+        description: "Blend multiplication and division while tracking railways, factories, and industrial planning across the empire.",
+        paceLabel: "Rail pace",
+        secondsPerQuestion: 5,
+        facts: [
+            "Railroads, factories, and steel production helped power rapid industrial growth.",
+            "Engineers relied on exact measurements to build bridges, tracks, and machines.",
+            "Ports and telegraph lines helped move goods and information faster."
+        ]
+    },
+    {
+        id: "dutch",
+        name: "Dutch Empire",
+        passMark: 90,
+        totalQuestions: 10,
+        operations: ["division", "mixed"],
+        maxFactor: 12,
+        maxRight: 14,
+        image: "https://upload.wikimedia.org/wikipedia/commons/5/50/Dutch_Empire35.PNG",
+        description: "Shift into division and mixed facts while navigating merchants, canals, ports, and worldwide trading posts.",
+        paceLabel: "Merchant pace",
+        secondsPerQuestion: 4,
+        facts: [
+            "Dutch merchants built trade networks that linked Europe, Asia, Africa, and the Americas.",
+            "Canals and warehouses helped cities store goods and move them efficiently.",
+            "Trading companies used records, prices, and cargo lists to plan each voyage."
+        ]
+    },
+    {
+        id: "russia",
+        name: "Russian Empire",
+        passMark: 90,
+        totalQuestions: 10,
+        operations: ["multiplication", "division", "mixed"],
+        maxFactor: 12,
+        maxRight: 18,
+        image: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Russian_Empire_%281863%29.jpg",
+        description: "Finish the European empires journey with the hardest mixed facts, long-distance routes, and the fastest final timing.",
+        paceLabel: "Imperial pace",
+        secondsPerQuestion: 2.5,
+        facts: [
+            "The Russian Empire stretched across huge distances, so transport and communication were major challenges.",
+            "Rail lines and river routes helped connect faraway cities, farms, and military posts.",
+            "Large-scale planning needed accurate numbers for distance, supplies, and travel time."
+        ]
+    }
+];
+
+const journeyGameConfigs = {
+    eras: {
+        label: "American Eras Math Journey",
+        tip: `${player.nickname}, travel through American history by answering math questions and unlocking era facts.`,
+        unitLabel: "era",
+        unitLabelTitle: "Era",
+        unitLabelPlural: "eras",
+        collectionLabel: "American history",
+        questionCountLabel: "Era Questions",
+        questionCountHelp: "American Eras Math Journey uses shorter era rounds: choose 5 or 10 questions for each era.",
+        victoryLabel: "American Eras Victory",
+        modeDescription: "Travel through American history by mastering math era by era.",
+        eras: americanJourneyEras
+    },
+    empires: {
+        label: "European Empires Math Journey",
+        tip: `${player.nickname}, travel across European empires by answering math questions and unlocking empire facts.`,
+        unitLabel: "empire",
+        unitLabelTitle: "Empire",
+        unitLabelPlural: "empires",
+        collectionLabel: "European empires",
+        questionCountLabel: "Empire Questions",
+        questionCountHelp: "European Empires Math Journey uses shorter empire rounds: choose 5 or 10 questions for each empire.",
+        victoryLabel: "European Empires Victory",
+        modeDescription: "Travel across European empires by mastering math one empire at a time.",
+        eras: europeanEmpireEras
+    }
+};
+
+const journeyModeKeys = Object.keys(journeyGameConfigs);
+
 const journeyDeckSource = typeof journeyCardDecks !== "undefined"
     ? journeyCardDecks
     : {};
 const journeyImageCache = new Map();
 const journeyImageRequests = new Map();
+const additionPlaceNames = ["ones", "tens", "hundreds", "thousands", "ten-thousands", "hundred-thousands"];
 
 const modes = {
     normal: {
@@ -185,6 +316,12 @@ const modes = {
         timed: false,
         timeLimit: null,
         tip: `${player.nickname}, multiplication normal mode gives you time to think and build your streak.`
+    },
+    trifecta: {
+        label: "Trifecta",
+        timed: false,
+        timeLimit: null,
+        tip: `${player.nickname}, line up three rows and solve the whole stack cleanly.`
     },
     sprint: {
         label: "Sprint",
@@ -209,12 +346,20 @@ const modes = {
         timed: false,
         timeLimit: null,
         tip: `${player.nickname}, travel through American history by answering math questions and unlocking era facts.`
+    },
+    empires: {
+        label: "European Empires Math Journey",
+        timed: false,
+        timeLimit: null,
+        tip: `${player.nickname}, travel across European empires by answering math questions and unlocking empire facts.`
     }
 };
 
 const elements = {
-    setupScreen: document.querySelector("#setup-screen"),
+    operationScreen: document.querySelector("#operation-screen"),
+    configScreen: document.querySelector("#config-screen"),
     gameScreen: document.querySelector("#game-screen"),
+    backToOperation: document.querySelector("#back-to-operation"),
     backToSetup: document.querySelector("#back-to-setup"),
     resultDialog: document.querySelector("#result-dialog"),
     resultModal: document.querySelector("#result-modal"),
@@ -227,6 +372,7 @@ const elements = {
     journeyImageModalFact: document.querySelector("#journey-image-modal-fact"),
     resultPlayAgain: document.querySelector("#result-play-again"),
     resultBackToSetup: document.querySelector("#result-back-setup"),
+    resultBackToMain: document.querySelector("#result-back-main"),
     resultCelebration: document.querySelector("#result-celebration"),
     resultRatingChip: document.querySelector("#result-rating-chip"),
     resultPraise: document.querySelector("#result-praise"),
@@ -246,10 +392,13 @@ const elements = {
         document.querySelector("#result-stat-1-value"),
         document.querySelector("#result-stat-2-value")
     ],
+    operationChoiceCards: document.querySelectorAll("[data-operation-choice]"),
     operation: document.querySelector("#operation"),
     operationHelp: document.querySelector("#operation-help"),
+    selectedOperationLabel: document.querySelector("#selected-operation-label"),
     difficulty: document.querySelector("#difficulty"),
     difficultyHelp: document.querySelector("#difficulty-help"),
+    focusTableCard: document.querySelector(".focus-field-card"),
     focusTableGroup: document.querySelector("#focus-table-group"),
     focusTableLabel: document.querySelector("#focus-table-label"),
     focusTableHelp: document.querySelector("#focus-table-help"),
@@ -261,6 +410,8 @@ const elements = {
     questionCount: document.querySelector("#question-count"),
     journeyQuestionCountCard: document.querySelector("#journey-question-count-card"),
     journeyQuestionCount: document.querySelector("#journey-question-count"),
+    journeyQuestionCountLabel: document.querySelector("#journey-question-count-label"),
+    journeyQuestionCountHelp: document.querySelector("#journey-question-count-help"),
     scopeLabel: document.querySelector("#scope-label"),
     currentDifficulty: document.querySelector("#current-difficulty"),
     scopeStatusPill: document.querySelector("#scope-label").closest(".status-pill"),
@@ -268,6 +419,7 @@ const elements = {
     currentOperation: document.querySelector("#current-operation"),
     startGame: document.querySelector("#start-game"),
     answerForm: document.querySelector("#answer-form"),
+    additionBoard: document.querySelector("#addition-board"),
     answerInput: document.querySelector("#answer-input"),
     submitAnswer: document.querySelector("#submit-answer"),
     flashControls: document.querySelector("#flash-controls"),
@@ -311,7 +463,7 @@ const elements = {
 const state = {
     operation: "multiplication",
     selectedMode: "normal",
-    difficulty: 1,
+    difficulty: 12,
     sprintLevel: "very-easy",
     focusTable: 6,
     answersOn: false,
@@ -320,9 +472,11 @@ const state = {
     round: null,
     timerId: null,
     celebrationId: null,
+    additionAdvanceId: null,
     pendingSprintLevelUp: null,
     pendingJourneyAction: null,
     journeyFactId: null,
+    journeyStates: {},
     journey: null,
     awaitingJourneyContinue: false,
     ignoreJourneyEmptySubmit: false,
@@ -331,34 +485,131 @@ const state = {
 };
 
 function showScreen(screenName) {
-    const showSetup = screenName === "setup";
-    elements.setupScreen.classList.toggle("hidden", !showSetup);
-    elements.gameScreen.classList.toggle("hidden", showSetup);
+    elements.operationScreen.classList.toggle("hidden", screenName !== "operation");
+    elements.configScreen.classList.toggle("hidden", screenName !== "config");
+    elements.gameScreen.classList.toggle("hidden", screenName !== "game");
 }
 
 function isDivisionMode() {
     return state.operation === "division";
 }
 
+function isAdditionMode() {
+    return state.operation === "addition";
+}
+
+function isSubtractionMode() {
+    return state.operation === "subtraction";
+}
+
+function isBoardOperationKey(operationKey) {
+    return operationKey === "addition" || operationKey === "subtraction";
+}
+
 function isMixedMode() {
     return state.operation === "mixed";
 }
 
-function isJourneyMode() {
-    return state.selectedMode === "eras";
+function isTrifectaMode(modeKey = state.selectedMode) {
+    return modeKey === "trifecta";
+}
+
+function isBoardQuestion(question = state.round && state.round.question) {
+    return Boolean(question && isBoardOperationKey(question.operation));
+}
+
+function getBoardOperandCountForMode(modeKey = state.selectedMode) {
+    return isTrifectaMode(modeKey) ? 3 : 2;
+}
+
+function isJourneyMode(modeKey = state.selectedMode) {
+    return journeyModeKeys.includes(modeKey);
+}
+
+function getJourneyConfig(modeKey = state.selectedMode) {
+    return journeyGameConfigs[modeKey] || journeyGameConfigs.eras;
+}
+
+function getJourneyEras(modeKey = state.selectedMode) {
+    return getJourneyConfig(modeKey).eras;
+}
+
+function getJourneyEraById(eraId, modeKey = state.selectedMode) {
+    return getJourneyEras(modeKey).find((entry) => entry.id === eraId) || null;
+}
+
+function getJourneyStateForMode(modeKey = state.selectedMode) {
+    if (!isJourneyMode(modeKey)) {
+        return null;
+    }
+
+    if (!state.journeyStates[modeKey]) {
+        state.journeyStates[modeKey] = createJourneyState();
+    }
+
+    return state.journeyStates[modeKey];
+}
+
+function syncJourneyState(modeKey = state.selectedMode) {
+    state.journey = getJourneyStateForMode(modeKey);
+    return state.journey;
 }
 
 function getCurrentJourneyEra() {
-    if (!state.journey) {
-        return eras[0];
+    const currentEras = getJourneyEras();
+    const journeyState = state.journey || getJourneyStateForMode();
+
+    if (!journeyState) {
+        return currentEras[0];
     }
 
-    return eras[state.journey.currentEraIndex] || eras[0];
+    return currentEras[journeyState.currentEraIndex] || currentEras[0];
+}
+
+function getAdditionMaxDigitsForLevel(level = state.difficulty) {
+    const safeLevel = Math.max(1, Math.min(12, level));
+    return Math.min(5, 2 + Math.floor((safeLevel - 1) / 3));
+}
+
+function getAdditionDigitRangeText(level = state.difficulty) {
+    const maxDigits = getAdditionMaxDigitsForLevel(level);
+    return maxDigits === 2
+        ? "2-digit numbers"
+        : `2- to ${maxDigits}-digit numbers`;
+}
+
+function getDifficultyOptionLabel(value) {
+    if (isBoardOperationKey(state.operation)) {
+        return `Level ${value} - up to ${getAdditionMaxDigitsForLevel(value)} digits`;
+    }
+
+    return `Level ${value} - facts up to ${Math.max(2, value)}`;
+}
+
+function updateDifficultyOptionLabels() {
+    Array.from(elements.difficulty.options).forEach((option) => {
+        const value = Number(option.value);
+        option.textContent = getDifficultyOptionLabel(value);
+    });
+}
+
+function modeSupportsOperation(modeKey, operationKey = state.operation) {
+    if (isBoardOperationKey(operationKey)) {
+        return ["normal", "trifecta", "sprint", "perfect"].includes(modeKey);
+    }
+
+    return true;
+}
+
+function updateModeCardAvailability(roundActive = Boolean(state.round && !state.round.over)) {
+    elements.modeCards.forEach((card) => {
+        card.disabled = roundActive || !modeSupportsOperation(card.dataset.mode);
+    });
 }
 
 function getOperationMissionLabel() {
     if (isMixedMode()) {
-        return "mixed-fact";
+        return "mixed-operation";
     }
 
     return operations[state.operation].label.toLowerCase();
@@ -389,13 +640,19 @@ function getJourneyOperations(era) {
 }
 
 function getOperationSetLabel(operationList) {
-    if (operationList.length > 1) {
-        return "mixed multiplication and division";
+    const labels = operationList
+        .map((operationKey) => operations[operationKey]?.label.toLowerCase() || operationKey)
+        .filter(Boolean);
+
+    if (labels.length > 1) {
+        const summary = labels.length === 2
+            ? `${labels[0]} and ${labels[1]}`
+            : `${labels.slice(0, -1).join(", ")}, and ${labels[labels.length - 1]}`;
+
+        return `mixed ${summary}`;
     }
 
-    return operationList[0] === "division"
-        ? "division"
-        : "multiplication";
+    return labels[0] || "math";
 }
 
 function getJourneyOperationLabel(era) {
@@ -403,35 +660,55 @@ function getJourneyOperationLabel(era) {
 }
 
 function getJourneyMissionText(era) {
-    return `${player.nickname}, clear ${era.name} with ${state.journeyQuestionCount} ${getJourneyOperationLabel(era)} questions and reach ${era.passMark}% to unlock the next stop in history.`;
+    const journeyConfig = getJourneyConfig();
+    return `${player.nickname}, clear ${era.name} with ${state.journeyQuestionCount} ${getJourneyOperationLabel(era)} questions and reach ${era.passMark}% to unlock the next ${journeyConfig.unitLabel} in the journey.`;
 }
 
 function getJourneyTipText(era) {
+    const journeyConfig = getJourneyConfig();
     const paceText = era.secondsPerQuestion
         ? ` ${era.paceLabel} gives ${era.secondsPerQuestion} seconds per question.`
         : " Take your time and build accuracy before moving on.";
-    return `${player.nickname}, every correct answer unlocks a history fact from ${era.name.toLowerCase()}.${paceText}`;
+    return `${player.nickname}, every correct answer unlocks a history fact from ${era.name.toLowerCase()} in the ${journeyConfig.collectionLabel} journey.${paceText}`;
 }
 
 function getDifficultyHelpText() {
     if (isJourneyMode()) {
-        return "American Eras Math Journey sets the math challenge for each era automatically.";
+        const journeyConfig = getJourneyConfig();
+        return `${journeyConfig.label} sets the math challenge for each ${journeyConfig.unitLabel} automatically.`;
+    }
+
+    if (isAdditionMode()) {
+        return `Addition uses a column board with carry boxes and ${getAdditionDigitRangeText()}. Higher levels unlock larger numbers up to 5 digits.`;
+    }
+
+    if (isSubtractionMode()) {
+        return `Subtraction uses a column board with borrow boxes and ${getAdditionDigitRangeText()}. Higher levels unlock larger numbers up to 5 digits.`;
     }
 
     if (isDivisionMode()) {
-        return "Difficulty 1 asks only exact division by 1. Difficulty 12 unlocks exact division facts using divisors 1 to 12.";
+        return "Difficulty 1 starts with exact division facts built from 2. Difficulty 12 unlocks exact division facts through 12, while 2, 10, and 11 stay rare.";
     }
 
     if (isMixedMode()) {
-        return "Difficulty 1 mixes easy multiplication and exact division by 1. Difficulty 12 mixes multiplication and exact division facts from 1 to 12.";
+        return "Difficulty 1 starts with 2-digit addition and subtraction, 2-based multiplication, and exact division. Higher levels unlock larger column math numbers and harder fact families.";
     }
 
-    return "Difficulty 1 asks only facts with 1. Difficulty 12 unlocks every table from 1 to 12.";
+    return "Difficulty 1 starts with the 2s. Difficulty 12 unlocks every table from 2 to 12, while 2, 10, and 11 stay rare.";
 }
 
 function getOperationHelpText() {
     if (isJourneyMode()) {
-        return "Choose Sky's journey focus. When an era supports it, the challenge follows this operation choice.";
+        const journeyConfig = getJourneyConfig();
+        return `Choose Sky's journey focus. When a ${journeyConfig.unitLabel} supports it, the challenge follows this operation choice.`;
+    }
+
+    if (isAdditionMode()) {
+        return "Sky will practice stacked addition with carry boxes in Normal, Trifecta, Sprint, and Perfect Run.";
+    }
+
+    if (isSubtractionMode()) {
+        return "Sky will practice stacked subtraction with borrow boxes in Normal, Trifecta, Sprint, and Perfect Run.";
     }
 
     if (isDivisionMode()) {
@@ -439,7 +716,7 @@ function getOperationHelpText() {
     }
 
     if (isMixedMode()) {
-        return "Sky will practice a mixed set of multiplication and exact division facts.";
+        return "Sky will practice a mixed set of all operations available for the selected game type.";
     }
 
     return "Sky will practice multiplication facts only.";
@@ -481,18 +758,42 @@ function getFlashFamilyText() {
     return `the ${state.focusTable} times table`;
 }
 
+function getSprintPaceDescription(operationKey = state.operation, level = state.difficulty) {
+    const pace = getSprintPaceProfile();
+
+    if (isBoardOperationKey(operationKey)) {
+        return `${pace.secondsPerQuestion}s per digit for up to ${getAdditionMaxDigitsForLevel(level)} digits`;
+    }
+
+    return `${pace.secondsPerQuestion}s per question`;
+}
+
+function getSprintLevelHelpText(levelKey = state.sprintLevel, operationKey = state.operation, level = state.difficulty) {
+    const sprintLevel = sprintPaceBands.find((band) => band.key === levelKey) || sprintPaceBands[0];
+
+    if (isBoardOperationKey(operationKey)) {
+        return `${sprintLevel.label} sprint gives ${sprintLevel.secondsPerQuestion} seconds per digit, up to ${getAdditionMaxDigitsForLevel(level)} digits per ${operationKey} problem.`;
+    }
+
+    return `${sprintLevel.label} sprint gives ${sprintLevel.secondsPerQuestion} seconds per question.`;
+}
+
 function getMissionText(modeKey) {
     const count = state.questionCount;
     const operationLabel = getOperationMissionLabel();
 
-    if (modeKey === "eras") {
+    if (isJourneyMode(modeKey)) {
         const era = getCurrentJourneyEra();
         return getJourneyMissionText(era);
     }
 
+    if (modeKey === "trifecta") {
+        return `${player.nickname}, finish ${count} trifecta ${operationLabel} questions and collect as many stars as you can.`;
+    }
+
     if (modeKey === "sprint") {
         const pace = getSprintPaceProfile();
-        return `${player.nickname}, answer ${count} ${operationLabel} questions before the timer hits zero. ${pace.secondsPerQuestion}s per question at ${pace.label.toLowerCase()} pace.`;
+        return `${player.nickname}, answer ${count} ${operationLabel} questions before the timer hits zero. ${getSprintPaceDescription()} at ${pace.label.toLowerCase()} pace.`;
     }
 
     if (modeKey === "perfect") {
@@ -507,9 +808,43 @@ function getMissionText(modeKey) {
 }
 
 function getTipText(modeKey) {
-    if (modeKey === "eras") {
+    if (isJourneyMode(modeKey)) {
         const era = getCurrentJourneyEra();
         return getJourneyTipText(era);
+    }
+
+    if (isAdditionMode()) {
+        if (modeKey === "trifecta") {
+            return `${player.nickname}, stack three ${getAdditionDigitRangeText()} and add all three rows from right to left.`;
+        }
+
+        if (modeKey === "sprint") {
+            const pace = getSprintPaceProfile();
+            return `Think fast, ${player.firstName}, and add ${getAdditionDigitRangeText()} one column at a time. ${pace.label} pace gives ${getSprintPaceDescription("addition")}.`;
+        }
+
+        if (modeKey === "perfect") {
+            return `${player.nickname}, line up ${getAdditionDigitRangeText()} and use the carry boxes carefully. One mistake ends the run.`;
+        }
+
+        return `${player.nickname}, stack ${getAdditionDigitRangeText()} and use the carry boxes to add from right to left.`;
+    }
+
+    if (isSubtractionMode()) {
+        if (modeKey === "trifecta") {
+            return `${player.nickname}, stack three ${getAdditionDigitRangeText()} and subtract both lower rows from right to left.`;
+        }
+
+        if (modeKey === "sprint") {
+            const pace = getSprintPaceProfile();
+            return `Think fast, ${player.firstName}, and subtract ${getAdditionDigitRangeText()} one column at a time. ${pace.label} pace gives ${getSprintPaceDescription("subtraction")}.`;
+        }
+
+        if (modeKey === "perfect") {
+            return `${player.nickname}, line up ${getAdditionDigitRangeText()} and use the borrow boxes carefully. One mistake ends the run.`;
+        }
+
+        return `${player.nickname}, stack ${getAdditionDigitRangeText()} and use the borrow boxes to subtract from right to left.`;
     }
 
     if (modeKey === "flash") {
@@ -517,16 +852,16 @@ function getTipText(modeKey) {
     }
 
     if (isMixedMode() && modeKey === "perfect") {
-        return `${player.nickname}, Perfect Run is the best mode for mastering mixed multiplication and division facts.`;
+        return `${player.nickname}, Perfect Run is the best mode for mastering a full mixed set of operations.`;
     }
 
     if (isMixedMode() && modeKey === "sprint") {
         const pace = getSprintPaceProfile();
-        return `Think fast, ${player.firstName}, and switch cleanly between multiplication and division. ${pace.label} pace gives ${pace.secondsPerQuestion} seconds per question.`;
+        return `Think fast, ${player.firstName}, and switch cleanly between every operation this mode allows. ${pace.label} pace gives ${pace.secondsPerQuestion} seconds per question.`;
     }
 
     if (isMixedMode() && modeKey === "normal") {
-        return `${player.nickname}, mixed normal mode is a great way to practice both multiplication and division together.`;
+        return `${player.nickname}, mixed normal mode is a great way to practice every operation this mode allows together.`;
     }
 
     if (modeKey === "perfect") {
@@ -553,9 +888,13 @@ function getTipText(modeKey) {
 
 function updateOperationUi() {
     elements.operation.value = state.operation;
+    if (elements.selectedOperationLabel) {
+        elements.selectedOperationLabel.textContent = operations[state.operation].label;
+    }
     elements.currentOperation.textContent = isJourneyMode()
         ? getJourneyOperationLabel(getCurrentJourneyEra())
         : operations[state.operation].label;
+    updateDifficultyOptionLabels();
     elements.operationHelp.textContent = getOperationHelpText();
     elements.difficultyHelp.textContent = getDifficultyHelpText();
     elements.focusTableLabel.textContent = getFocusLabelText();
@@ -566,13 +905,13 @@ function populateDifficultyOptions() {
     for (let value = 1; value <= 12; value += 1) {
         const option = document.createElement("option");
         option.value = String(value);
-        option.textContent = `Level ${value} - facts up to ${value}`;
+        option.textContent = getDifficultyOptionLabel(value);
         elements.difficulty.append(option);
     }
 }
 
 function populateFocusTableOptions() {
-    for (let value = 1; value <= 12; value += 1) {
+    for (let value = 2; value <= 12; value += 1) {
         const option = document.createElement("option");
         option.value = String(value);
         option.textContent = `${value}`;
@@ -581,7 +920,12 @@ function populateFocusTableOptions() {
 }
 
 function setMode(modeKey) {
+    if (!modeSupportsOperation(modeKey)) {
+        return;
+    }
+
     state.selectedMode = modeKey;
+    state.journey = isJourneyMode(modeKey) ? syncJourneyState(modeKey) : null;
     const mode = modes[modeKey];
 
     elements.modeCards.forEach((card) => {
@@ -589,6 +933,7 @@ function setMode(modeKey) {
     });
 
     elements.currentMode.textContent = mode.label;
+    updateJourneyQuestionCountUi();
     updateOperationUi();
     elements.missionText.textContent = getMissionText(modeKey);
     elements.questionTip.textContent = getTipText(modeKey);
@@ -598,18 +943,32 @@ function setMode(modeKey) {
 function setOperation(operationKey) {
     state.operation = operationKey;
 
-    if (!isDivisionMode() && state.focusTable === 1) {
+    if (state.focusTable < 2) {
         setFocusTable(2);
     }
 
+    updateDifficultyOptionLabels();
+
+    if (!modeSupportsOperation(state.selectedMode, operationKey)) {
+        setMode("normal");
+        return;
+    }
+
     updateOperationUi();
+    elements.sprintLevelHelp.textContent = getSprintLevelHelpText();
     elements.missionText.textContent = getMissionText(state.selectedMode);
     elements.questionTip.textContent = getTipText(state.selectedMode);
     syncModeUi();
 }
 
+function openConfigForOperation(operationKey) {
+    setOperation(operationKey);
+    showScreen("config");
+}
+
 function setDifficulty(value) {
     state.difficulty = value;
+    elements.sprintLevelHelp.textContent = getSprintLevelHelpText();
     elements.missionText.textContent = getMissionText(state.selectedMode);
     elements.questionTip.textContent = getTipText(state.selectedMode);
     elements.difficultyHelp.textContent = getDifficultyHelpText();
@@ -617,7 +976,7 @@ function setDifficulty(value) {
 }
 
 function setFocusTable(value) {
-    const minimumValue = isDivisionMode() ? 1 : 2;
+    const minimumValue = 2;
     const safeValue = Math.max(minimumValue, Math.min(12, value));
     state.focusTable = safeValue;
     elements.focusTable.value = String(safeValue);
@@ -654,11 +1013,26 @@ function setJourneyQuestionCount(value) {
     }
 }
 
+function updateJourneyQuestionCountUi() {
+    if (!elements.journeyQuestionCountLabel || !elements.journeyQuestionCountHelp) {
+        return;
+    }
+
+    const journeyConfig = getJourneyConfig();
+    elements.journeyQuestionCountLabel.textContent = journeyConfig.questionCountLabel;
+    elements.journeyQuestionCountHelp.textContent = journeyConfig.questionCountHelp;
+
+    Array.from(elements.journeyQuestionCount.options).forEach((option) => {
+        const count = Number(option.value);
+        option.textContent = `${count} questions per ${journeyConfig.unitLabel}`;
+    });
+}
+
 function setSprintLevel(levelKey) {
     const sprintLevel = sprintPaceBands.find((band) => band.key === levelKey) || sprintPaceBands[0];
     state.sprintLevel = sprintLevel.key;
     elements.sprintLevel.value = sprintLevel.key;
-    elements.sprintLevelHelp.textContent = `${sprintLevel.label} sprint gives ${sprintLevel.secondsPerQuestion} seconds per question.`;
+    elements.sprintLevelHelp.textContent = getSprintLevelHelpText(sprintLevel.key);
     elements.missionText.textContent = getMissionText(state.selectedMode);
     elements.questionTip.textContent = getTipText(state.selectedMode);
 }
@@ -695,6 +1069,11 @@ function getSprintPaceProfile() {
 
 function getSprintTimeLimit() {
     const pace = getSprintPaceProfile();
+
+    if (isBoardOperationKey(state.operation)) {
+        return pace.secondsPerQuestion * getAdditionMaxDigitsForLevel() * state.questionCount;
+    }
+
     return pace.secondsPerQuestion * state.questionCount;
 }
 
@@ -796,7 +1175,8 @@ function getJourneyFallbackImage(card, era) {
 
     const title = escapeJourneySvgText(card.title || era.name);
     const eraName = escapeJourneySvgText(era.name);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-label="${title}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#fbf2da"/><stop offset="100%" stop-color="#d6b06d"/></linearGradient></defs><rect width="1200" height="780" fill="url(#bg)"/><circle cx="1000" cy="130" r="150" fill="rgba(255,255,255,0.25)"/><rect x="72" y="72" width="1056" height="636" rx="28" fill="rgba(28,24,19,0.12)" stroke="rgba(28,24,19,0.25)" stroke-width="4"/><text x="96" y="148" fill="#5c2f16" font-family="Georgia, serif" font-size="34" letter-spacing="4">AMERICAN ERAS</text><text x="96" y="286" fill="#1c1813" font-family="Georgia, serif" font-size="84" font-weight="700">${title}</text><text x="96" y="374" fill="#563927" font-family="Georgia, serif" font-size="40">${eraName}</text><text x="96" y="636" fill="#5c2f16" font-family="Arial, sans-serif" font-size="28">Loading a live history image for this question...</text></svg>`;
+    const journeyLabel = escapeJourneySvgText(getJourneyConfig().label.toUpperCase());
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-label="${title}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#fbf2da"/><stop offset="100%" stop-color="#d6b06d"/></linearGradient></defs><rect width="1200" height="780" fill="url(#bg)"/><circle cx="1000" cy="130" r="150" fill="rgba(255,255,255,0.25)"/><rect x="72" y="72" width="1056" height="636" rx="28" fill="rgba(28,24,19,0.12)" stroke="rgba(28,24,19,0.25)" stroke-width="4"/><text x="96" y="148" fill="#5c2f16" font-family="Georgia, serif" font-size="34" letter-spacing="4">${journeyLabel}</text><text x="96" y="286" fill="#1c1813" font-family="Georgia, serif" font-size="84" font-weight="700">${title}</text><text x="96" y="374" fill="#563927" font-family="Georgia, serif" font-size="40">${eraName}</text><text x="96" y="636" fill="#5c2f16" font-family="Arial, sans-serif" font-size="28">Loading a live history image for this question...</text></svg>`;
     card.fallbackImage = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
     return card.fallbackImage;
 }
@@ -845,7 +1225,7 @@ function applyJourneyPhoto(card, era) {
 function isCurrentJourneyCard(roundId, card) {
     return Boolean(
         state.round
-        && state.round.modeKey === "eras"
+        && isJourneyMode(state.round.modeKey)
         && state.round.roundId === roundId
         && getJourneyActiveCard(state.round) === card
     );
@@ -987,10 +1367,10 @@ function openJourneyImageModal() {
         return;
     }
 
-    const era = state.round && state.round.modeKey === "eras"
-        ? eras.find((entry) => entry.id === state.round.eraId) || getCurrentJourneyEra()
+    const era = state.round && isJourneyMode(state.round.modeKey)
+        ? getJourneyEraById(state.round.eraId, state.round.modeKey) || getCurrentJourneyEra()
         : getCurrentJourneyEra();
-    const card = state.round && state.round.modeKey === "eras"
+    const card = state.round && isJourneyMode(state.round.modeKey)
         ? getJourneyActiveCard(state.round)
         : getJourneyPreviewCard(era);
 
@@ -1048,11 +1428,11 @@ function applyJourneyDisplay(era) {
 
 function scheduleJourneyDisplayRefresh() {
     window.setTimeout(() => {
-        if (!state.round || state.round.modeKey !== "eras") {
+        if (!state.round || !isJourneyMode(state.round.modeKey)) {
             return;
         }
 
-        const era = eras.find((entry) => entry.id === state.round.eraId) || getCurrentJourneyEra();
+        const era = getJourneyEraById(state.round.eraId, state.round.modeKey) || getCurrentJourneyEra();
         applyJourneyDisplay(era);
     }, 0);
 }
@@ -1072,7 +1452,7 @@ function pulseJourneyImage(tone) {
 }
 
 function animateJourneyPanelSwap(variant = "advance") {
-    if (!state.round || state.round.modeKey !== "eras") {
+    if (!state.round || !isJourneyMode(state.round.modeKey)) {
         return Promise.resolve(false);
     }
 
@@ -1112,20 +1492,25 @@ function updateJourneyUi() {
         return;
     }
 
-    const era = state.round && state.round.modeKey === "eras"
-        ? eras.find((entry) => entry.id === state.round.eraId) || getCurrentJourneyEra()
+    const activeJourneyMode = state.round && isJourneyMode(state.round.modeKey)
+        ? state.round.modeKey
+        : state.selectedMode;
+    const currentEras = getJourneyEras(activeJourneyMode);
+    const journeyConfig = getJourneyConfig(activeJourneyMode);
+    const era = state.round && isJourneyMode(state.round.modeKey)
+        ? getJourneyEraById(state.round.eraId, state.round.modeKey) || getCurrentJourneyEra()
         : getCurrentJourneyEra();
-    const eraIndex = eras.findIndex((entry) => entry.id === era.id);
-    const answered = state.round && state.round.modeKey === "eras"
+    const eraIndex = currentEras.findIndex((entry) => entry.id === era.id);
+    const answered = state.round && isJourneyMode(state.round.modeKey)
         ? state.round.answered
         : 0;
-    const targetQuestions = state.round && state.round.modeKey === "eras"
+    const targetQuestions = state.round && isJourneyMode(state.round.modeKey)
         ? state.round.targetQuestions
         : state.journeyQuestionCount;
     const progressPercent = targetQuestions === 0
         ? 0
         : (answered / targetQuestions) * 100;
-    const journeyCard = state.round && state.round.modeKey === "eras"
+    const journeyCard = state.round && isJourneyMode(state.round.modeKey)
         ? getJourneyActiveCard(state.round)
         : getJourneyPreviewCard(era);
 
@@ -1134,14 +1519,14 @@ function updateJourneyUi() {
     updateJourneyPhoto(
         journeyCard,
         era,
-        state.round && state.round.modeKey === "eras" ? state.round.roundId : null
+        state.round && isJourneyMode(state.round.modeKey) ? state.round.roundId : null
     );
     applyJourneyDisplay(era);
     elements.journeyEraStamp.textContent = journeyCard && journeyCard.title
         ? journeyCard.title
         : era.name;
     elements.journeyEraName.textContent = era.name;
-    elements.journeyEraBadge.textContent = `Era ${eraIndex + 1} of ${eras.length}`;
+    elements.journeyEraBadge.textContent = `${journeyConfig.unitLabelTitle} ${eraIndex + 1} of ${currentEras.length}`;
     elements.journeyEraDescription.textContent = journeyCard && journeyCard.title
         ? `${era.description} Today's history card: ${journeyCard.title}.`
         : era.description;
@@ -1161,12 +1546,16 @@ function updateTimerUi() {
     const totalTime = state.round.totalTime || 1;
     const percentRemaining = Math.max(0, (state.round.remainingTime / totalTime) * 100);
     const pace = state.round.paceProfile || getSprintPaceProfile();
-    const timerPaused = (state.round.modeKey === "eras" && state.awaitingJourneyContinue) || isJourneyImageModalOpen();
+    const timerPaused = (isJourneyMode(state.round.modeKey) && state.awaitingJourneyContinue) || isJourneyImageModalOpen();
+    const timerOperation = state.round.question?.operation || state.operation;
+    const timerPaceText = isBoardOperationKey(timerOperation)
+        ? `${pace.label} · ${pace.secondsPerQuestion}s per digit`
+        : `${pace.label} · ${pace.secondsPerQuestion}s each`;
 
     elements.timerValue.textContent = `${state.round.remainingTime}s`;
     elements.timerPace.textContent = timerPaused
         ? "Paused for fact reading"
-        : `${pace.label} · ${pace.secondsPerQuestion}s each`;
+        : timerPaceText;
     elements.timerProgress.style.width = `${percentRemaining}%`;
     elements.timerPill.classList.add("sprint-active");
     elements.timerPill.classList.toggle("warning", percentRemaining <= 40 && percentRemaining > 20);
@@ -1174,6 +1563,14 @@ function updateTimerUi() {
 }
 
 function formatQuestionBase(question) {
+    if (question.operation === "addition") {
+        return getBoardOperands(question).join(" + ");
+    }
+
+    if (question.operation === "subtraction") {
+        return getBoardOperands(question).join(" - ");
+    }
+
     if (question.operation === "division") {
         return `${question.dividend} ÷ ${question.divisor}`;
     }
@@ -1183,6 +1580,526 @@ function formatQuestionBase(question) {
 
 function formatSolvedQuestion(question) {
     return `${formatQuestionBase(question)} = ${question.answer}`;
+}
+
+function getAdditionPlaceLabel(columnCount, columnIndex) {
+    const placeIndex = columnCount - columnIndex - 1;
+    return additionPlaceNames[placeIndex] || `column ${columnIndex + 1}`;
+}
+
+function getBoardOperands(question) {
+    if (!question) {
+        return [];
+    }
+
+    if (Array.isArray(question.operands) && question.operands.length > 0) {
+        return question.operands;
+    }
+
+    const operands = [question.left, question.right].filter((value) => Number.isFinite(value));
+    return operands;
+}
+
+function getAlignedDigits(value, columnCount) {
+    const digits = String(value).split("");
+
+    return Array.from({ length: columnCount }, (_, index) => {
+        const digitIndex = digits.length - columnCount + index;
+        return digitIndex >= 0 ? digits[digitIndex] : "";
+    });
+}
+
+function buildAdditionDigitCellMarkup(digit) {
+    return `<span class="addition-digit-cell${digit ? "" : " blank"}">${digit || "&nbsp;"}</span>`;
+}
+
+function buildAdditionInputMarkup(inputClassName, rowName, columnCount, columnIndex) {
+    const question = state.round && state.round.question;
+    const placeLabel = getAdditionPlaceLabel(columnCount, columnIndex);
+    const inputLabel = rowName === "carry"
+        ? `${question?.operation === "subtraction" ? "Borrow" : "Carry"} for ${placeLabel}`
+        : `Answer digit for ${placeLabel}`;
+
+    return `<input class="${inputClassName}" data-row="${rowName}" data-column="${columnIndex}" inputmode="numeric" pattern="[0-9]*" maxlength="1" type="text" aria-label="${inputLabel}">`;
+}
+
+function getBoardOperationCopy(question = state.round && state.round.question) {
+    const isSubtractionQuestion = question?.operation === "subtraction";
+    const operandCount = getBoardOperands(question).length;
+    const trifectaLabel = operandCount === 3 ? "Trifecta " : "";
+
+    return {
+        name: isSubtractionQuestion ? "subtraction" : "addition",
+        sign: isSubtractionQuestion ? "-" : "+",
+        carryPlural: isSubtractionQuestion ? "borrows" : "carries",
+        resultLabel: isSubtractionQuestion ? "difference" : "sum",
+        prompt: isSubtractionQuestion
+            ? `Solve the stacked ${trifectaLabel.toLowerCase()}subtraction.`
+            : `Solve the stacked ${trifectaLabel.toLowerCase()}addition.`,
+        help: isSubtractionQuestion
+            ? operandCount === 3
+                ? "Use the top boxes for borrows and subtract both lower rows one digit at a time."
+                : "Use the top boxes for borrows and type the answer one digit at a time."
+            : operandCount === 3
+                ? "Use the top boxes for carries and add all three rows one digit at a time."
+                : "Use the top boxes for carries and type the answer one digit at a time."
+    };
+}
+
+function clearAdditionAdvance() {
+    if (state.additionAdvanceId) {
+        window.clearTimeout(state.additionAdvanceId);
+        state.additionAdvanceId = null;
+    }
+}
+
+function getAdditionRewardElement() {
+    return elements.additionBoard.querySelector(".addition-reward");
+}
+
+function clearAdditionFeedbackState() {
+    const reward = getAdditionRewardElement();
+
+    getAdditionInputs(".addition-answer-input, .addition-carry-input").forEach((input) => {
+        input.classList.remove("is-correct", "is-wrong");
+    });
+
+    elements.additionBoard.classList.remove("success", "mistake");
+
+    if (reward) {
+        reward.textContent = "";
+        reward.classList.add("hidden");
+    }
+}
+
+function setAdditionReward(message) {
+    const reward = getAdditionRewardElement();
+
+    if (!reward) {
+        return;
+    }
+
+    reward.textContent = message;
+    reward.classList.remove("hidden");
+}
+
+function setAdditionInputsDisabled(disabled) {
+    getAdditionInputs(".addition-answer-input, .addition-carry-input").forEach((input) => {
+        input.disabled = disabled;
+    });
+}
+
+function clearAdditionBoard() {
+    clearAdditionAdvance();
+    elements.additionBoard.innerHTML = "";
+    elements.additionBoard.classList.add("hidden");
+    elements.answerForm.classList.remove("addition-answer-form");
+    elements.questionCard.classList.remove("addition-mode");
+    elements.answerInput.classList.remove("hidden");
+}
+
+function renderAdditionBoard(question) {
+    const boardCopy = getBoardOperationCopy(question);
+    const operands = getBoardOperands(question);
+    const columnCount = Math.max(
+        ...operands.map((operand) => String(operand).length),
+        String(question.answer).length
+    );
+    const carryInputs = Array.from({ length: columnCount }, (_, index) => buildAdditionInputMarkup(
+        "addition-carry-input",
+        "carry",
+        columnCount,
+        index
+    )).join("");
+    const answerInputs = Array.from({ length: columnCount }, (_, index) => buildAdditionInputMarkup(
+        "addition-answer-input",
+        "answer",
+        columnCount,
+        index
+    )).join("");
+    const operandRows = operands.map((operand, index) => {
+        const digits = getAlignedDigits(operand, columnCount);
+        const signMarkup = index === 0
+            ? '<span class="addition-sign-spacer" aria-hidden="true"></span>'
+            : `<span class="addition-sign" aria-hidden="true">${boardCopy.sign}</span>`;
+
+        return `
+            <div class="addition-grid-row addition-problem-row">
+                ${signMarkup}
+                ${digits.map((digit) => buildAdditionDigitCellMarkup(digit)).join("")}
+            </div>
+        `;
+    }).join("");
+
+    elements.additionBoard.style.setProperty("--addition-columns", String(columnCount));
+    elements.additionBoard.innerHTML = `
+        <div class="addition-stack" role="group" aria-label="Column ${boardCopy.name} board">
+            <div class="addition-grid-row addition-carry-row">
+                <span class="addition-sign-spacer" aria-hidden="true"></span>
+                ${carryInputs}
+            </div>
+            ${operandRows}
+            <div class="addition-divider" aria-hidden="true"></div>
+            <div class="addition-grid-row addition-answer-grid">
+                <span class="addition-sign-spacer" aria-hidden="true"></span>
+                ${answerInputs}
+            </div>
+        </div>
+        <div class="addition-reward hidden" aria-live="polite"></div>
+        <p class="addition-board-help">${boardCopy.help}</p>
+    `;
+    elements.additionBoard.classList.remove("hidden");
+    elements.answerForm.classList.add("addition-answer-form");
+    elements.questionCard.classList.add("addition-mode");
+    elements.answerInput.classList.add("hidden");
+}
+
+function renderQuestionPrompt() {
+    if (!state.round || !state.round.question) {
+        clearAdditionBoard();
+        return;
+    }
+
+    if (isBoardQuestion(state.round.question)) {
+        elements.questionText.textContent = getBoardOperationCopy(state.round.question).prompt;
+        renderAdditionBoard(state.round.question);
+        return;
+    }
+
+    clearAdditionBoard();
+    elements.questionText.textContent = state.round.modeKey === "flash"
+        ? formatQuestionBase(state.round.question)
+        : `${formatQuestionBase(state.round.question)} = ?`;
+}
+
+function getAdditionInputs(selector) {
+    return Array.from(elements.additionBoard.querySelectorAll(selector));
+}
+
+function focusAdditionAnswerEntry() {
+    const answerInputs = getAdditionInputs(".addition-answer-input");
+    const target = [...answerInputs].reverse().find((input) => input.value === "")
+        || answerInputs[answerInputs.length - 1];
+
+    if (target) {
+        target.focus();
+        target.select();
+    }
+}
+
+function focusActiveAnswerEntry() {
+    if (isBoardQuestion() && state.round.modeKey !== "flash") {
+        focusAdditionAnswerEntry();
+        return;
+    }
+
+    elements.answerInput.focus();
+}
+
+function moveAdditionRowFocus(currentInput, selector, step) {
+    const rowInputs = getAdditionInputs(selector);
+    const currentIndex = rowInputs.indexOf(currentInput);
+    const target = rowInputs[currentIndex + step];
+
+    if (target) {
+        target.focus();
+        target.select();
+    }
+}
+
+function moveAdditionVerticalFocus(currentInput, selector) {
+    const target = elements.additionBoard.querySelector(`${selector}[data-column="${currentInput.dataset.column}"]`);
+
+    if (target) {
+        target.focus();
+        target.select();
+    }
+}
+
+function handleAdditionBoardInput(event) {
+    const input = event.target;
+
+    if (!(input instanceof HTMLInputElement) || !input.matches(".addition-carry-input, .addition-answer-input")) {
+        return;
+    }
+
+    const sanitizedValue = input.value.replace(/\D/g, "");
+    input.value = sanitizedValue ? sanitizedValue.slice(-1) : "";
+    input.classList.remove("is-correct", "is-wrong");
+    elements.additionBoard.classList.remove("mistake", "success");
+
+    const reward = getAdditionRewardElement();
+    if (reward) {
+        reward.textContent = "";
+        reward.classList.add("hidden");
+    }
+
+    if (!input.value) {
+        return;
+    }
+
+    if (input.matches(".addition-answer-input")) {
+        moveAdditionRowFocus(input, ".addition-answer-input", -1);
+        return;
+    }
+
+    moveAdditionRowFocus(input, ".addition-carry-input", -1);
+}
+
+function handleAdditionBoardKeydown(event) {
+    const input = event.target;
+
+    if (!(input instanceof HTMLInputElement) || !input.matches(".addition-carry-input, .addition-answer-input")) {
+        return;
+    }
+
+    if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        moveAdditionRowFocus(
+            input,
+            input.matches(".addition-answer-input") ? ".addition-answer-input" : ".addition-carry-input",
+            -1
+        );
+        return;
+    }
+
+    if (event.key === "ArrowRight") {
+        event.preventDefault();
+        moveAdditionRowFocus(
+            input,
+            input.matches(".addition-answer-input") ? ".addition-answer-input" : ".addition-carry-input",
+            1
+        );
+        return;
+    }
+
+    if (event.key === "ArrowUp" && input.matches(".addition-answer-input")) {
+        event.preventDefault();
+        moveAdditionVerticalFocus(input, ".addition-carry-input");
+        return;
+    }
+
+    if (event.key === "ArrowDown" && input.matches(".addition-carry-input")) {
+        event.preventDefault();
+        moveAdditionVerticalFocus(input, ".addition-answer-input");
+        return;
+    }
+
+    if (event.key === "Backspace" && input.value === "") {
+        moveAdditionRowFocus(
+            input,
+            input.matches(".addition-answer-input") ? ".addition-answer-input" : ".addition-carry-input",
+            1
+        );
+    }
+}
+
+function getSubmittedAnswerState() {
+    if (isBoardQuestion()) {
+        const digits = getAdditionInputs(".addition-answer-input").map((input) => input.value.trim());
+        const firstFilledIndex = digits.findIndex(Boolean);
+
+        if (firstFilledIndex === -1) {
+            return { trimmedValue: "", guess: Number.NaN, incomplete: false };
+        }
+
+        const enteredDigits = digits.slice(firstFilledIndex);
+
+        if (enteredDigits.some((digit) => digit === "")) {
+            return { trimmedValue: "", guess: Number.NaN, incomplete: true };
+        }
+
+        const trimmedValue = enteredDigits.join("");
+        return {
+            trimmedValue,
+            guess: Number(trimmedValue),
+            incomplete: false
+        };
+    }
+
+    const trimmedValue = elements.answerInput.value.trim();
+    return {
+        trimmedValue,
+        guess: Number(trimmedValue),
+        incomplete: false
+    };
+}
+
+function getAdditionExpectedDigits(question = state.round && state.round.question) {
+    if (!question) {
+        return [];
+    }
+
+    return getAlignedDigits(question.answer, getAdditionInputs(".addition-answer-input").length);
+}
+
+function getAdditionExpectedCarries(question = state.round && state.round.question) {
+    if (!question) {
+        return [];
+    }
+
+    const columnCount = getAdditionInputs(".addition-carry-input").length;
+    const operandDigits = getBoardOperands(question)
+        .map((operand) => getAlignedDigits(operand, columnCount).map((digit) => Number(digit || 0)));
+    const carries = Array.from({ length: columnCount }, () => "");
+
+    if (question.operation === "subtraction") {
+        let borrowIn = 0;
+
+        for (let index = columnCount - 1; index >= 0; index -= 1) {
+            const minuendDigit = operandDigits[0][index] || 0;
+            const subtrahendTotal = operandDigits
+                .slice(1)
+                .reduce((sum, digits) => sum + (digits[index] || 0), borrowIn);
+            const deficit = subtrahendTotal - minuendDigit;
+            const borrowValue = deficit > 0 ? Math.ceil(deficit / 10) : 0;
+
+            if (borrowValue > 0 && index > 0) {
+                carries[index - 1] = String(borrowValue);
+            }
+
+            borrowIn = borrowValue;
+        }
+
+        return carries;
+    }
+
+    let carryIn = 0;
+
+    for (let index = columnCount - 1; index >= 0; index -= 1) {
+        carries[index] = carryIn > 0 ? String(carryIn) : "";
+        const columnTotal = operandDigits
+            .reduce((sum, digits) => sum + (digits[index] || 0), carryIn);
+        carryIn = Math.floor(columnTotal / 10);
+    }
+
+    return carries;
+}
+
+function focusFirstAdditionMismatch() {
+    const target = getAdditionInputs(".addition-carry-input, .addition-answer-input")
+        .find((input) => input.classList.contains("is-wrong"));
+
+    if (target) {
+        target.focus();
+        target.select();
+    }
+}
+
+function markAdditionInputs(expectedValues, inputs, options = {}) {
+    const {
+        allowEmptyCorrect = false,
+        tolerateBlankIndexes = []
+    } = options;
+    let allCorrect = true;
+
+    inputs.forEach((input, index) => {
+        const expectedValue = expectedValues[index] || "";
+        const actualValue = input.value.trim();
+        const toleratedBlank = tolerateBlankIndexes.includes(index)
+            && actualValue === ""
+            && expectedValue !== "";
+        const isCorrect = actualValue === expectedValue || toleratedBlank;
+        const shouldMarkCorrect = actualValue === expectedValue && (actualValue !== "" || allowEmptyCorrect);
+        const shouldMarkWrong = !isCorrect && (actualValue !== "" || expectedValue !== "");
+
+        input.classList.remove("is-correct", "is-wrong");
+
+        if (shouldMarkCorrect) {
+            input.classList.add("is-correct");
+        }
+
+        if (shouldMarkWrong) {
+            input.classList.add("is-wrong");
+            allCorrect = false;
+        }
+    });
+
+    return allCorrect;
+}
+
+function markAdditionAnswerDigits(isCorrect) {
+    const expectedDigits = getAdditionExpectedDigits();
+    const expectedCarries = getAdditionExpectedCarries();
+    const answerInputs = getAdditionInputs(".addition-answer-input");
+    const carryInputs = getAdditionInputs(".addition-carry-input");
+    const tolerateBlankIndexes = state.round.question.operation === "addition"
+        ? [0]
+        : [];
+    const carriesCorrect = markAdditionInputs(expectedCarries, carryInputs, {
+        tolerateBlankIndexes
+    });
+    const digitsCorrect = markAdditionInputs(expectedDigits, answerInputs);
+    const boardCorrect = isCorrect && carriesCorrect && digitsCorrect;
+
+    elements.additionBoard.classList.toggle("success", boardCorrect);
+    elements.additionBoard.classList.toggle("mistake", !boardCorrect);
+
+    return boardCorrect;
+}
+
+function queueAdditionAdvance() {
+    clearAdditionAdvance();
+    state.additionAdvanceId = window.setTimeout(() => {
+        state.additionAdvanceId = null;
+
+        if (!state.round || state.round.over || !isBoardQuestion(state.round.question)) {
+            return;
+        }
+
+        elements.submitAnswer.disabled = false;
+        setAdditionInputsDisabled(false);
+        nextQuestion();
+    }, 1100);
+}
+
+function handleAdditionAnswer(guess) {
+    const earnedPoints = 100 + (state.round.streak * 20);
+    const isCorrect = guess === state.round.question.answer;
+    const boardCorrect = markAdditionAnswerDigits(isCorrect);
+    const boardCopy = getBoardOperationCopy();
+
+    if (!boardCorrect) {
+        state.round.questionAttempts += 1;
+
+        if (state.round.questionAttempts < 2) {
+            showFeedback(`The green digits and ${boardCopy.carryPlural} are right, ${player.nickname}. Fix the red ones. You get one more chance on this question.`, "neutral");
+            focusFirstAdditionMismatch();
+            return;
+        }
+
+        state.round.answered += 1;
+        state.round.streak = 0;
+        state.round.score = Math.max(0, state.round.score - 30);
+        setAdditionInputsDisabled(true);
+        elements.submitAnswer.disabled = true;
+        showFeedback(`Good try, ${player.firstName}. ${formatSolvedQuestion(state.round.question)}.`, "bad");
+        updateScoreboard();
+        updateProgress();
+        updateBadges();
+
+        if (state.round.modeKey === "perfect") {
+            finishRound(`${player.nickname}'s Perfect Run ended after one mistake.`);
+            return;
+        }
+
+        queueAdditionAdvance();
+        return;
+    }
+
+    state.round.answered += 1;
+    state.round.correct += 1;
+    state.round.streak += 1;
+    state.round.bestStreak = Math.max(state.round.bestStreak, state.round.streak);
+    state.round.score += earnedPoints;
+    setAdditionReward(`Star earned! +${earnedPoints}`);
+    setAdditionInputsDisabled(true);
+    elements.submitAnswer.disabled = true;
+    showFeedback(`Nice job, ${player.nickname}. ${formatSolvedQuestion(state.round.question)}.`, "good");
+    updateScoreboard();
+    updateProgress();
+    updateBadges();
+    queueAdditionAdvance();
 }
 
 function clearCelebration() {
@@ -1303,38 +2220,43 @@ function getJourneyFact(era, round) {
     return era.facts[factIndex];
 }
 
-function getJourneyTotalAccuracy() {
-    if (!state.journey || state.journey.totalAnswered === 0) {
+function getJourneyTotalAccuracy(modeKey = state.selectedMode) {
+    const journeyState = getJourneyStateForMode(modeKey);
+
+    if (!journeyState || journeyState.totalAnswered === 0) {
         return 0;
     }
 
-    return Math.round((state.journey.totalCorrect / state.journey.totalAnswered) * 100);
+    return Math.round((journeyState.totalCorrect / journeyState.totalAnswered) * 100);
 }
 
 function getJourneyResultDialogData(round) {
-    const era = eras.find((entry) => entry.id === round.eraId) || getCurrentJourneyEra();
+    const currentEras = getJourneyEras(round.modeKey);
+    const journeyConfig = getJourneyConfig(round.modeKey);
+    const journeyState = getJourneyStateForMode(round.modeKey);
+    const era = getJourneyEraById(round.eraId, round.modeKey) || getCurrentJourneyEra();
     const accuracy = getRoundAccuracy(round);
     const passed = accuracy >= era.passMark;
-    const isFinalEra = state.journey && state.journey.currentEraIndex === eras.length - 1;
-    const nextEra = !isFinalEra ? eras[state.journey.currentEraIndex + 1] : null;
+    const isFinalEra = journeyState && journeyState.currentEraIndex === currentEras.length - 1;
+    const nextEra = !isFinalEra ? currentEras[journeyState.currentEraIndex + 1] : null;
 
     if (!passed) {
         return {
             tone: "improve",
-            badge: "Replay Era",
-            praise: "Try the era again!",
+            badge: `Replay ${journeyConfig.unitLabelTitle}`,
+            praise: `Try the ${journeyConfig.unitLabel} again!`,
             heading: `Replay ${era.name}`,
             message: `${player.nickname}, you need ${era.passMark}% to pass ${era.name}. This round finished at ${accuracy}%.`,
-            summary: `Replay ${era.name} to strengthen the math and unlock the next stop in the journey.`,
+            summary: `Replay ${era.name} to strengthen the math and unlock the next ${journeyConfig.unitLabel} in the journey.`,
             scoreLabel: "Journey Score",
             scoreValue: String(round.score),
-            scoreNote: `${accuracy}% Era Accuracy`,
+            scoreNote: `${accuracy}% ${journeyConfig.unitLabelTitle} Accuracy`,
             awardNote: `Pass Mark: ${era.passMark}%`,
-            primaryLabel: "Replay Era",
+            primaryLabel: `Replay ${journeyConfig.unitLabelTitle}`,
             journeyAction: "retry-era",
             celebration: null,
             stats: [
-                { label: "Era", value: era.name },
+                { label: journeyConfig.unitLabelTitle, value: era.name },
                 { label: "Best Streak", value: String(round.bestStreak) }
             ]
         };
@@ -1345,39 +2267,39 @@ function getJourneyResultDialogData(round) {
             tone: accuracy === 100 ? "perfect" : "excellent",
             badge: "History Master",
             praise: "Journey complete!",
-            heading: `${player.nickname}'s American Eras Victory`,
-            message: `${player.nickname}, you completed every era and finished the full history journey with ${accuracy}% in the final challenge.`,
-            summary: `${player.firstName} cleared all ${eras.length} eras and proved mastery from Jamestown to the Space Race.`,
+            heading: `${player.nickname}'s ${journeyConfig.victoryLabel}`,
+            message: `${player.nickname}, you completed every ${journeyConfig.unitLabel} and finished the full ${journeyConfig.collectionLabel} journey with ${accuracy}% in the final challenge.`,
+            summary: `${player.firstName} cleared all ${currentEras.length} ${journeyConfig.unitLabelPlural} and proved mastery across ${journeyConfig.collectionLabel}.`,
             scoreLabel: "Journey Score",
             scoreValue: String(round.score),
-            scoreNote: `${getJourneyTotalAccuracy()}% Journey Accuracy`,
-            awardNote: "All Eras Completed",
+            scoreNote: `${getJourneyTotalAccuracy(round.modeKey)}% Journey Accuracy`,
+            awardNote: `All ${journeyConfig.unitLabelTitle}s Completed`,
             primaryLabel: "Start Journey Again",
             journeyAction: "restart-journey",
             celebration: accuracy === 100 ? "perfect" : "excellent",
             stats: [
-                { label: "Eras Cleared", value: `${eras.length} / ${eras.length}` },
-                { label: "Final Era", value: era.name }
+                { label: `${journeyConfig.unitLabelTitle}s Cleared`, value: `${currentEras.length} / ${currentEras.length}` },
+                { label: `Final ${journeyConfig.unitLabelTitle}`, value: era.name }
             ]
         };
     }
 
     return {
         tone: accuracy === 100 ? "perfect" : "excellent",
-        badge: "Era Complete",
-        praise: "Next era unlocked!",
+        badge: `${journeyConfig.unitLabelTitle} Complete`,
+        praise: `Next ${journeyConfig.unitLabel} unlocked!`,
         heading: `${era.name} Complete`,
         message: `${player.nickname}, you passed ${era.name} with ${accuracy}% and unlocked ${nextEra.name}.`,
-        summary: `Era cleared. ${nextEra.name} is now ready for the next math journey challenge.`,
+        summary: `${journeyConfig.unitLabelTitle} cleared. ${nextEra.name} is now ready for the next math journey challenge.`,
         scoreLabel: "Journey Score",
         scoreValue: String(round.score),
-        scoreNote: `${accuracy}% Era Accuracy`,
+        scoreNote: `${accuracy}% ${journeyConfig.unitLabelTitle} Accuracy`,
         awardNote: `${nextEra.name} Unlocked`,
-        primaryLabel: "Next Era",
+        primaryLabel: `Next ${journeyConfig.unitLabelTitle}`,
         journeyAction: "next-era",
         celebration: accuracy === 100 ? "perfect" : "excellent",
         stats: [
-            { label: "Era Accuracy", value: `${accuracy}%` },
+            { label: `${journeyConfig.unitLabelTitle} Accuracy`, value: `${accuracy}%` },
             { label: "Unlocked", value: nextEra.name }
         ]
     };
@@ -1386,7 +2308,7 @@ function getJourneyResultDialogData(round) {
 function getResultDialogData(round, options = {}) {
     const note = options.message;
 
-    if (round.modeKey === "eras") {
+    if (isJourneyMode(round.modeKey)) {
         return getJourneyResultDialogData(round);
     }
 
@@ -1500,7 +2422,7 @@ function shouldShowFlashAnswer() {
 }
 
 function handleJourneyAnswer(guess) {
-    const era = eras.find((entry) => entry.id === state.round.eraId) || getCurrentJourneyEra();
+    const era = getJourneyEraById(state.round.eraId, state.round.modeKey) || getCurrentJourneyEra();
     const isCorrect = guess === state.round.question.answer;
 
     if (isCorrect) {
@@ -1553,7 +2475,7 @@ function handleJourneyAnswer(guess) {
     elements.submitAnswer.disabled = true;
 
     window.setTimeout(async () => {
-        if (!state.round || state.round.over || state.round.modeKey !== "eras") {
+        if (!state.round || state.round.over || !isJourneyMode(state.round.modeKey)) {
             return;
         }
 
@@ -1563,14 +2485,13 @@ function handleJourneyAnswer(guess) {
         }
 
         await animateJourneyPanelSwap("skip");
-        if (!state.round || state.round.over || state.round.modeKey !== "eras") {
+        if (!state.round || state.round.over || !isJourneyMode(state.round.modeKey)) {
             return;
         }
 
         elements.answerInput.disabled = false;
         elements.submitAnswer.disabled = false;
         nextQuestion();
-        elements.answerInput.focus();
     }, 1400);
 }
 
@@ -1579,7 +2500,7 @@ async function continueJourneyAfterFact(event) {
         return;
     }
 
-    if (!state.round || state.round.over || state.round.modeKey !== "eras" || !state.awaitingJourneyContinue || state.journeyPanelTransitioning) {
+    if (!state.round || state.round.over || !isJourneyMode(state.round.modeKey) || !state.awaitingJourneyContinue || state.journeyPanelTransitioning) {
         return;
     }
 
@@ -1598,14 +2519,13 @@ async function continueJourneyAfterFact(event) {
     }
 
     await animateJourneyPanelSwap("advance");
-    if (!state.round || state.round.over || state.round.modeKey !== "eras") {
+    if (!state.round || state.round.over || !isJourneyMode(state.round.modeKey)) {
         return;
     }
 
     elements.answerInput.disabled = false;
     elements.submitAnswer.disabled = false;
     nextQuestion();
-    elements.answerInput.focus();
 }
 
 function updateFlashAnswer() {
@@ -1621,7 +2541,8 @@ function updateFlashAnswer() {
 function syncModeUi() {
     const isFlashMode = state.selectedMode === "flash";
     const isSprintMode = state.selectedMode === "sprint";
-    const isJourney = state.selectedMode === "eras";
+    const isJourney = isJourneyMode();
+    elements.focusTableCard.classList.toggle("hidden", !isFlashMode);
     elements.focusTableGroup.classList.toggle("hidden", !isFlashMode);
     elements.focusTableHelp.classList.toggle("hidden", !isFlashMode);
     elements.sprintLevelGroup.classList.toggle("hidden", !isSprintMode);
@@ -1636,6 +2557,7 @@ function syncModeUi() {
     updateScopeDisplay();
     updateFlashAnswer();
     updateJourneyUi();
+    updateModeCardAvailability();
     setRoundControls(Boolean(state.round && !state.round.over));
 }
 
@@ -1661,6 +2583,18 @@ function buildOperationBag(round, operationPool) {
     return round.operationBag;
 }
 
+function getSelectedOperationPool(modeKey = state.selectedMode) {
+    if (!isMixedMode()) {
+        return [state.operation];
+    }
+
+    if (modeKey === "flash" || isJourneyMode(modeKey)) {
+        return ["multiplication", "division"];
+    }
+
+    return ["addition", "subtraction", "multiplication", "division"];
+}
+
 function getNextOperationKey(operationPool) {
     if (operationPool.length <= 1) {
         return operationPool[0];
@@ -1680,21 +2614,23 @@ function getNextOperationKey(operationPool) {
 }
 
 function pickQuestionOperand(maxValue, options = {}) {
-    const { avoidOne = false, discourageTen = false } = options;
-    const safeMax = Math.max(1, maxValue);
-    const minValue = avoidOne && safeMax > 1 ? 2 : 1;
+    const {
+        avoidOne = false,
+        minimumValue = 1,
+        discouragedValues = []
+    } = options;
+    const minValue = Math.max(1, avoidOne ? 2 : minimumValue);
+    const safeMax = Math.max(minValue, maxValue);
     const candidates = [];
 
     for (let value = minValue; value <= safeMax; value += 1) {
         let weight = 1;
 
-        if (discourageTen && value === 10 && safeMax >= 10 && minValue < 10) {
-            weight = 0.35;
-        }
-
         if (avoidOne && value === 1) {
             weight = 0;
         }
+
+        weight *= getOperandWeightAdjustment(value, discouragedValues);
 
         candidates.push({ value, weight });
     }
@@ -1717,7 +2653,195 @@ function pickQuestionOperand(maxValue, options = {}) {
     return candidates[candidates.length - 1].value;
 }
 
+function getRandomNumberWithDigits(digitCount) {
+    const safeDigitCount = Math.max(2, Math.min(5, digitCount));
+    const minValue = 10 ** (safeDigitCount - 1);
+    const maxValue = (10 ** safeDigitCount) - 1;
+    return randomInt(minValue, maxValue);
+}
+
+function hasAdditionCarry(operands) {
+    const columnCount = Math.max(...operands.map((operand) => String(operand).length));
+    const operandDigits = operands.map((operand) => String(operand).padStart(columnCount, "0").split("").map(Number));
+    let carryIn = 0;
+
+    for (let index = columnCount - 1; index >= 0; index -= 1) {
+        const columnTotal = operandDigits.reduce((sum, digits) => sum + digits[index], carryIn);
+
+        if (columnTotal >= 10) {
+            return true;
+        }
+
+        carryIn = Math.floor(columnTotal / 10);
+    }
+
+    return false;
+}
+
+function getMaximumBorrowMarker(operands) {
+    const columnCount = Math.max(...operands.map((operand) => String(operand).length));
+    const operandDigits = operands.map((operand) => String(operand).padStart(columnCount, "0").split("").map(Number));
+    let borrowIn = 0;
+    let maximumBorrow = 0;
+
+    for (let index = columnCount - 1; index >= 0; index -= 1) {
+        const minuendDigit = operandDigits[0][index] || 0;
+        const subtrahendTotal = operandDigits
+            .slice(1)
+            .reduce((sum, digits) => sum + (digits[index] || 0), borrowIn);
+        const deficit = subtrahendTotal - minuendDigit;
+        const borrowValue = deficit > 0 ? Math.ceil(deficit / 10) : 0;
+
+        maximumBorrow = Math.max(maximumBorrow, borrowValue);
+        borrowIn = borrowValue;
+    }
+
+    return maximumBorrow;
+}
+
+function hasSubtractionBorrow(operands) {
+    return getMaximumBorrowMarker(operands) > 0;
+}
+
+function generateAdditionQuestionCandidate(operandCount = getBoardOperandCountForMode()) {
+    const maxDigits = getAdditionMaxDigitsForLevel();
+    const leadDigitCount = randomInt(2, maxDigits);
+    let operands = [];
+
+    const buildOperands = () => Array.from({ length: operandCount }, () => {
+        const digitFloor = Math.max(2, leadDigitCount - 1);
+        const digitCount = Math.random() < 0.35
+            ? randomInt(digitFloor, leadDigitCount)
+            : leadDigitCount;
+        return getRandomNumberWithDigits(digitCount);
+    });
+
+    operands = buildOperands();
+
+    for (let attempt = 0; attempt < 8 && !hasAdditionCarry(operands); attempt += 1) {
+        operands = buildOperands();
+    }
+
+    const answer = operands.reduce((sum, operand) => sum + operand, 0);
+
+    return {
+        operation: "addition",
+        operands,
+        left: operands[0],
+        right: operands[1],
+        answer,
+        revealed: state.answersOn
+    };
+}
+
+function generateSubtractionQuestionCandidate(operandCount = getBoardOperandCountForMode()) {
+    const maxDigits = getAdditionMaxDigitsForLevel();
+
+    if (operandCount === 2) {
+        const leftDigitCount = randomInt(2, maxDigits);
+        const rightDigitFloor = Math.max(2, leftDigitCount - 1);
+        const rightDigitCount = Math.random() < 0.35
+            ? randomInt(rightDigitFloor, leftDigitCount)
+            : leftDigitCount;
+        let left = getRandomNumberWithDigits(leftDigitCount);
+        let right = getRandomNumberWithDigits(rightDigitCount);
+
+        if (right > left) {
+            [left, right] = [right, left];
+        }
+
+        for (let attempt = 0; attempt < 8 && (!hasSubtractionBorrow([left, right]) || left === right); attempt += 1) {
+            left = getRandomNumberWithDigits(leftDigitCount);
+            right = getRandomNumberWithDigits(rightDigitCount);
+
+            if (right > left) {
+                [left, right] = [right, left];
+            }
+        }
+
+        if (left === right) {
+            if (left < (10 ** leftDigitCount) - 1) {
+                left += 1;
+            } else {
+                right = Math.max(1, right - 1);
+            }
+        }
+
+        return {
+            operation: "subtraction",
+            operands: [left, right],
+            left,
+            right,
+            answer: left - right,
+            revealed: state.answersOn
+        };
+    }
+
+    let operands = null;
+
+    for (let attempt = 0; attempt < 24; attempt += 1) {
+        const topDigitCount = randomInt(2, maxDigits);
+        const minuend = getRandomNumberWithDigits(topDigitCount);
+
+        if (minuend <= 20) {
+            continue;
+        }
+
+        const totalSubtrahend = randomInt(20, minuend - 1);
+        const firstSubtrahend = randomInt(10, totalSubtrahend - 10);
+        const secondSubtrahend = totalSubtrahend - firstSubtrahend;
+        const candidateOperands = [minuend, firstSubtrahend, secondSubtrahend];
+        const maximumBorrow = getMaximumBorrowMarker(candidateOperands);
+
+        if (hasSubtractionBorrow(candidateOperands) && maximumBorrow <= 1) {
+            operands = candidateOperands;
+            break;
+        }
+    }
+
+    if (!operands) {
+        let minuend = getRandomNumberWithDigits(randomInt(2, maxDigits));
+
+        while (minuend <= 20) {
+            minuend = getRandomNumberWithDigits(randomInt(2, maxDigits));
+        }
+
+        const totalSubtrahend = randomInt(20, minuend - 1);
+        const firstSubtrahend = randomInt(10, totalSubtrahend - 10);
+        operands = [minuend, firstSubtrahend, totalSubtrahend - firstSubtrahend];
+    }
+
+    return {
+        operation: "subtraction",
+        operands,
+        left: operands[0],
+        right: operands[1],
+        answer: operands[0] - operands[1] - operands[2],
+        revealed: state.answersOn
+    };
+}
+
+function getOperandWeightAdjustment(value, discouragedValues) {
+    if (!discouragedValues.includes(value)) {
+        return 1;
+    }
+
+    if (value === 2) {
+        return 0.12;
+    }
+
+    if (value === 10 || value === 11) {
+        return 0.04;
+    }
+
+    return 0.35;
+}
+
 function buildQuestionKey(question) {
+    if (isBoardOperationKey(question.operation)) {
+        return `${question.operation}:${getBoardOperands(question).join(":")}`;
+    }
+
     if (question.operation === "division") {
         return `division:${question.dividend}:${question.divisor}`;
     }
@@ -1729,13 +2853,28 @@ function generateQuestionCandidate(modeKey, operationKey, config = {}) {
     const maxFactor = config.maxFactor || state.difficulty;
     const maxRight = config.maxRight || 12;
     const multiplicationRightMax = Math.min(12, maxRight);
+    const discouragedValues = [2, 10, 11];
+
+    if (operationKey === "addition") {
+        return generateAdditionQuestionCandidate(getBoardOperandCountForMode(modeKey));
+    }
+
+    if (operationKey === "subtraction") {
+        return generateSubtractionQuestionCandidate(getBoardOperandCountForMode(modeKey));
+    }
 
     if (operationKey === "division") {
         const divisor = modeKey === "flash"
             ? state.focusTable
-            : pickQuestionOperand(maxFactor, { discourageTen: true });
+            : pickQuestionOperand(maxFactor, {
+                minimumValue: 2,
+                discouragedValues
+            });
         const divisionQuotientMax = Math.max(1, Math.min(12, maxRight, Math.floor(144 / divisor)));
-        const quotient = pickQuestionOperand(divisionQuotientMax, { discourageTen: true });
+        const quotient = pickQuestionOperand(divisionQuotientMax, {
+            minimumValue: 2,
+            discouragedValues
+        });
 
         return {
             operation: "division",
@@ -1748,8 +2887,16 @@ function generateQuestionCandidate(modeKey, operationKey, config = {}) {
 
     const left = modeKey === "flash"
         ? Math.max(2, state.focusTable)
-        : pickQuestionOperand(maxFactor, { avoidOne: true, discourageTen: true });
-    const right = pickQuestionOperand(multiplicationRightMax, { avoidOne: true, discourageTen: true });
+        : pickQuestionOperand(maxFactor, {
+            avoidOne: true,
+            minimumValue: 2,
+            discouragedValues
+        });
+    const right = pickQuestionOperand(multiplicationRightMax, {
+        avoidOne: true,
+        minimumValue: 2,
+        discouragedValues
+    });
 
     return {
         operation: "multiplication",
@@ -1761,9 +2908,7 @@ function generateQuestionCandidate(modeKey, operationKey, config = {}) {
 }
 
 function generateQuestion(modeKey, config = {}) {
-    const operationPool = config.operations || (isMixedMode()
-        ? ["multiplication", "division"]
-        : [state.operation]);
+    const operationPool = config.operations || getSelectedOperationPool(modeKey);
     const recentQuestionKeys = getQuestionHistory(state.round);
     let question = null;
 
@@ -1801,6 +2946,7 @@ function resetGameView() {
     closeResultDialog();
     clearCelebration();
     clearJourneyFact();
+    clearAdditionBoard();
     elements.questionText.textContent = "Press Start Sky's Game to begin.";
     elements.questionTip.textContent = getTipText(state.selectedMode);
     elements.summaryText.textContent = "No Sky round played yet.";
@@ -1822,9 +2968,15 @@ function resetGameView() {
     syncModeUi();
 }
 
-function returnToSetup() {
+function returnToConfig() {
     resetGameView();
-    showScreen("setup");
+    showScreen("config");
+}
+
+function returnToMainScreen() {
+    resetGameView();
+    closeResultDialog();
+    showScreen("operation");
 }
 
 function startRound() {
@@ -1832,15 +2984,13 @@ function startRound() {
     closeResultDialog();
 
     if (isJourneyMode()) {
-        if (!state.journey) {
-            state.journey = createJourneyState();
-        }
+        const journeyState = syncJourneyState();
 
         const era = getCurrentJourneyEra();
         const timeLimit = getJourneyTimeLimit(era);
-        const playCount = state.journey.eraPlayCounts[era.id] || 0;
+        const playCount = journeyState.eraPlayCounts[era.id] || 0;
         const journeyCards = buildJourneyCardQueue(era, state.journeyQuestionCount, playCount);
-        state.journey.eraPlayCounts[era.id] = playCount + 1;
+        journeyState.eraPlayCounts[era.id] = playCount + 1;
         state.pendingJourneyAction = null;
         state.awaitingJourneyContinue = false;
         state.round = {
@@ -1850,7 +3000,7 @@ function startRound() {
             correct: 0,
             streak: 0,
             bestStreak: 0,
-            score: state.journey.totalScore,
+            score: journeyState.totalScore,
             question: null,
             over: false,
             remainingTime: timeLimit,
@@ -1868,14 +3018,14 @@ function startRound() {
             roundId: `${Date.now()}-${Math.random()}`
         };
 
-        elements.currentMode.textContent = modes.eras.label;
+        elements.currentMode.textContent = modes[state.selectedMode].label;
         updateScoreboard();
         updateProgress();
         updateBadges();
         updateJourneyUi();
         setRoundControls(true);
         showScreen("game");
-        elements.summaryText.textContent = `${era.name} is ready. Reach ${era.passMark}% to unlock the next era.`;
+        elements.summaryText.textContent = `${era.name} is ready. Reach ${era.passMark}% to unlock the next ${getJourneyConfig().unitLabel}.`;
         elements.feedbackBanner.textContent = `${era.name} begins now, ${player.nickname}. Answer correctly to reveal history facts.`;
         elements.feedbackBanner.className = "feedback-banner neutral";
         elements.answerInput.disabled = false;
@@ -1897,12 +3047,10 @@ function startRound() {
         document.querySelector("#scope-label").textContent = "Era";
         document.querySelector("#current-difficulty").textContent = era.name;
         document.querySelector("#current-operation").textContent = getJourneyOperationLabel(era);
-        document.querySelector("#mission-text").textContent = `${player.nickname}, clear ${era.name} with ${state.journeyQuestionCount} ${getJourneyOperationLabel(era)} questions and reach ${era.passMark}% to unlock the next stop in history.`;
-        document.querySelector("#question-tip").textContent = era.secondsPerQuestion
-            ? `${player.nickname}, every correct answer unlocks a history fact from ${era.name.toLowerCase()}. ${era.paceLabel} gives ${era.secondsPerQuestion} seconds per question.`
-            : `${player.nickname}, every correct answer unlocks a history fact from ${era.name.toLowerCase()}. Take your time and build accuracy before moving on.`;
+        document.querySelector("#mission-text").textContent = getJourneyMissionText(era);
+        document.querySelector("#question-tip").textContent = getJourneyTipText(era);
         scheduleJourneyDisplayRefresh();
-        elements.answerInput.focus();
+        focusActiveAnswerEntry();
         return;
     }
 
@@ -1953,7 +3101,7 @@ function startRound() {
     nextQuestion();
 
     if (state.selectedMode !== "flash") {
-        elements.answerInput.focus();
+        focusActiveAnswerEntry();
     }
 }
 
@@ -1968,22 +3116,24 @@ function nextQuestion() {
     }
 
     state.round.questionAttempts = 0;
-    if (state.round.modeKey === "eras") {
+    if (isJourneyMode(state.round.modeKey)) {
         state.round.journeyCardIndex = state.round.answered;
     }
-    state.round.question = state.round.modeKey === "eras"
+    state.round.question = isJourneyMode(state.round.modeKey)
         ? generateQuestion(state.round.modeKey, {
             operations: getJourneyOperations(getCurrentJourneyEra()),
             maxFactor: state.round.maxFactor,
             maxRight: state.round.maxRight
         })
         : generateQuestion(state.round.modeKey);
-    elements.questionText.textContent = state.round.modeKey === "flash"
-        ? formatQuestionBase(state.round.question)
-        : `${formatQuestionBase(state.round.question)} = ?`;
+    renderQuestionPrompt();
     updateProgress();
     updateJourneyUi();
     updateFlashAnswer();
+
+    if (state.round.modeKey !== "flash") {
+        focusActiveAnswerEntry();
+    }
 }
 
 function submitAnswer(event) {
@@ -1993,23 +3143,33 @@ function submitAnswer(event) {
         return;
     }
 
-    const trimmedValue = elements.answerInput.value.trim();
-    const guess = Number(trimmedValue);
+    const { trimmedValue, guess, incomplete } = getSubmittedAnswerState();
 
-    if (trimmedValue === "" && state.round.modeKey === "eras" && state.ignoreJourneyEmptySubmit) {
+    if (trimmedValue === "" && isJourneyMode(state.round.modeKey) && state.ignoreJourneyEmptySubmit) {
         state.ignoreJourneyEmptySubmit = false;
         return;
     }
 
     state.ignoreJourneyEmptySubmit = false;
 
-    if (trimmedValue === "" || Number.isNaN(guess)) {
-        showFeedback(`${player.nickname}, type a number before you check your answer.`, "bad");
+    if (trimmedValue === "" || incomplete || Number.isNaN(guess)) {
+        const boardCopy = getBoardOperationCopy();
+        showFeedback(
+            incomplete && isBoardQuestion(state.round.question)
+                ? `${player.nickname}, fill each answer box before you check the ${boardCopy.resultLabel}.`
+                : `${player.nickname}, type a number before you check your answer.`,
+            "bad"
+        );
         return;
     }
 
-    if (state.round.modeKey === "eras") {
+    if (isJourneyMode(state.round.modeKey)) {
         handleJourneyAnswer(guess);
+        return;
+    }
+
+    if (isBoardQuestion(state.round.question)) {
+        handleAdditionAnswer(guess);
         return;
     }
 
@@ -2077,6 +3237,7 @@ function finishRound(message) {
     stopTimer();
     state.round.over = true;
     setRoundControls(false);
+    clearAdditionBoard();
     elements.answerInput.disabled = true;
     elements.submitAnswer.disabled = true;
     elements.showAnswer.disabled = true;
@@ -2084,18 +3245,20 @@ function finishRound(message) {
 
     const result = getResultDialogData(state.round, { message });
 
-    if (state.round.modeKey === "eras") {
-        const era = eras.find((entry) => entry.id === state.round.eraId) || getCurrentJourneyEra();
+    if (isJourneyMode(state.round.modeKey)) {
+        const currentEras = getJourneyEras(state.round.modeKey);
+        const journeyState = getJourneyStateForMode(state.round.modeKey);
+        const era = getJourneyEraById(state.round.eraId, state.round.modeKey) || getCurrentJourneyEra();
         const accuracy = getRoundAccuracy(state.round);
 
         if (accuracy >= era.passMark) {
-            if (!state.journey.completedEraIds.includes(era.id)) {
-                state.journey.completedEraIds.push(era.id);
+            if (!journeyState.completedEraIds.includes(era.id)) {
+                journeyState.completedEraIds.push(era.id);
             }
 
-            state.journey.unlockedEraIndex = Math.max(
-                state.journey.unlockedEraIndex,
-                Math.min(state.journey.currentEraIndex + 1, eras.length - 1)
+            journeyState.unlockedEraIndex = Math.max(
+                journeyState.unlockedEraIndex,
+                Math.min(journeyState.currentEraIndex + 1, currentEras.length - 1)
             );
         }
 
@@ -2135,9 +3298,7 @@ function setRoundControls(roundActive) {
     elements.sprintLevel.disabled = roundActive || state.selectedMode !== "sprint";
     elements.questionCount.disabled = roundActive || isJourneyMode();
     elements.journeyQuestionCount.disabled = roundActive || !isJourneyMode();
-    elements.modeCards.forEach((card) => {
-        card.disabled = roundActive;
-    });
+    updateModeCardAvailability(roundActive);
     elements.startGame.textContent = roundActive ? `${player.nickname}'s Round In Progress` : "Start Sky's Game";
 }
 
@@ -2149,7 +3310,7 @@ function startTimer() {
             return;
         }
 
-        if ((state.round.modeKey === "eras" && state.awaitingJourneyContinue) || isJourneyImageModalOpen()) {
+        if ((isJourneyMode(state.round.modeKey) && state.awaitingJourneyContinue) || isJourneyImageModalOpen()) {
             updateTimerUi();
             return;
         }
@@ -2259,6 +3420,12 @@ elements.modeCards.forEach((card) => {
     });
 });
 
+elements.operationChoiceCards.forEach((card) => {
+    card.addEventListener("click", () => {
+        openConfigForOperation(card.dataset.operationChoice);
+    });
+});
+
 elements.operation.addEventListener("change", (event) => {
     setOperation(event.target.value);
 });
@@ -2302,8 +3469,12 @@ elements.startGame.addEventListener("click", () => {
     startRound();
 });
 
+elements.backToOperation.addEventListener("click", () => {
+    showScreen("operation");
+});
+
 elements.backToSetup.addEventListener("click", () => {
-    returnToSetup();
+    returnToConfig();
 });
 
 elements.closeResultDialog.addEventListener("click", () => {
@@ -2321,29 +3492,32 @@ elements.resultPlayAgain.addEventListener("click", () => {
         document.querySelector("#scope-label").textContent = "Era";
         document.querySelector("#current-difficulty").textContent = era.name;
         document.querySelector("#current-operation").textContent = getJourneyOperationLabel(era);
-        document.querySelector("#mission-text").textContent = `${player.nickname}, clear ${era.name} with ${state.journeyQuestionCount} ${getJourneyOperationLabel(era)} questions and reach ${era.passMark}% to unlock the next stop in history.`;
-        document.querySelector("#question-tip").textContent = era.secondsPerQuestion
-            ? `${player.nickname}, every correct answer unlocks a history fact from ${era.name.toLowerCase()}. ${era.paceLabel} gives ${era.secondsPerQuestion} seconds per question.`
-            : `${player.nickname}, every correct answer unlocks a history fact from ${era.name.toLowerCase()}. Take your time and build accuracy before moving on.`;
+        document.querySelector("#mission-text").textContent = getJourneyMissionText(era);
+        document.querySelector("#question-tip").textContent = getJourneyTipText(era);
     };
 
     if (state.pendingJourneyAction === "next-era") {
-        state.journey.currentEraIndex = Math.min(state.journey.currentEraIndex + 1, eras.length - 1);
+        const journeyModeKey = state.round.modeKey;
+        const currentEras = getJourneyEras(journeyModeKey);
+        state.journey.currentEraIndex = Math.min(state.journey.currentEraIndex + 1, currentEras.length - 1);
         startRound();
-        setMode("eras");
+        setMode(journeyModeKey);
         return;
     }
 
     if (state.pendingJourneyAction === "retry-era") {
+        const journeyModeKey = state.round.modeKey;
         startRound();
-        setMode("eras");
+        setMode(journeyModeKey);
         return;
     }
 
     if (state.pendingJourneyAction === "restart-journey") {
-        state.journey = createJourneyState();
+        const journeyModeKey = state.round.modeKey;
+        state.journeyStates[journeyModeKey] = createJourneyState();
+        state.journey = state.journeyStates[journeyModeKey];
         startRound();
-        setMode("eras");
+        setMode(journeyModeKey);
         return;
     }
 
@@ -2355,7 +3529,11 @@ elements.resultPlayAgain.addEventListener("click", () => {
 });
 
 elements.resultBackToSetup.addEventListener("click", () => {
-    returnToSetup();
+    returnToConfig();
+});
+
+elements.resultBackToMain.addEventListener("click", () => {
+    returnToMainScreen();
 });
 
 elements.resultModal.addEventListener("click", (event) => {
@@ -2385,6 +3563,8 @@ elements.journeyImageModal.addEventListener("click", (event) => {
     }
 });
 
+elements.additionBoard.addEventListener("input", handleAdditionBoardInput);
+elements.additionBoard.addEventListener("keydown", handleAdditionBoardKeydown);
 elements.answerForm.addEventListener("submit", submitAnswer);
 
 document.addEventListener("keydown", (event) => {
@@ -2399,12 +3579,12 @@ document.addEventListener("keydown", (event) => {
 populateDifficultyOptions();
 populateFocusTableOptions();
 setOperation("multiplication");
-setDifficulty(1);
+setDifficulty(12);
 setSprintLevel("very-easy");
 setFocusTable(6);
 setQuestionCount(10);
 setJourneyQuestionCount(10);
 setMode("normal");
 resetGameView();
-showScreen("setup");
+showScreen("operation");
 elements.answersOn.checked = state.answersOn;
